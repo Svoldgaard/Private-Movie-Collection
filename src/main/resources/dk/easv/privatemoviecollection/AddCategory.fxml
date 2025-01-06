@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 
 
-<AnchorPane prefHeight="134.0" prefWidth="220.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.privatemoviecollection.AddCategory">
+<AnchorPane prefHeight="134.0" prefWidth="220.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.privatemoviecollection.GUI.Controller.CategoryController">
    <children>
       <Button layoutX="48.0" layoutY="79.0" mnemonicParsing="false" onAction="#btnSave" text="Save" />
       <Button layoutX="111.0" layoutY="79.0" mnemonicParsing="false" onAction="#btnCancel" text="Cancel" />
