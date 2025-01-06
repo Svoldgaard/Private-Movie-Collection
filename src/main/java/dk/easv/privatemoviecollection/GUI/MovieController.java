@@ -1,9 +1,9 @@
-package dk.easv.privatemoviecollection;
+package dk.easv.privatemoviecollection.GUI;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
-public class HelloController {
+public class MovieController {
     @FXML
     private Label welcomeText;
 

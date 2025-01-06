@@ -5,4 +5,6 @@ module dk.easv.privatemoviecollection {
 
     opens dk.easv.privatemoviecollection to javafx.fxml;
     exports dk.easv.privatemoviecollection;
+    exports dk.easv.privatemoviecollection.GUI;
+    opens dk.easv.privatemoviecollection.GUI to javafx.fxml;
 }
