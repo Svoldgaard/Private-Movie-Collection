@@ -1,4 +1,4 @@
-package dk.easv.privatemoviecollection.GUI;
+package dk.easv.privatemoviecollection.GUI.Controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
