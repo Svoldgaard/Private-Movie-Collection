@@ -9,6 +9,7 @@ target/
 .idea/compiler.xml
 .idea/libraries/
 .idea/misc.xml
+Config.settings
 *.iws
 *.iml
 *.ipr
