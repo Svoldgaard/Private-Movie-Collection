@@ -3,19 +3,13 @@
 <?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="134.0" prefWidth="220.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.privatemoviecollection.GUI.Controller.CategoryController">
+<AnchorPane prefHeight="134.0" prefWidth="220.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.privatemoviecollection.GUI.Controller.CategoryController">
    <children>
       <Button layoutX="48.0" layoutY="79.0" mnemonicParsing="false" onAction="#btnSave" text="Save" />
       <Button layoutX="111.0" layoutY="79.0" mnemonicParsing="false" onAction="#btnCancel" text="Cancel" />
       <TextField fx:id="txtCategory" layoutX="36.0" layoutY="40.0" promptText="Category" />
-      <Accordion>
-        <panes>
-          <TitledPane animated="false" text="untitled 1" />
-          <TitledPane animated="false" text="untitled 2" />
-        </panes>
-      </Accordion>
+      <Accordion />
    </children>
 </AnchorPane>
