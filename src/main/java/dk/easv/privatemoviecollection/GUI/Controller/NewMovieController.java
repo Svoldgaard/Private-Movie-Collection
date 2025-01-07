@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.IndexRange;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -22,6 +23,8 @@ public class NewMovieController {
     private TextField txtMovieTitle;
 
     private Movie movie;
+    @FXML
+    private ListView lstCategory;
 
     @FXML
     private void btnSave(ActionEvent actionEvent) {
