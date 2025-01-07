@@ -2,7 +2,9 @@ package dk.easv.privatemoviecollection.GUI.Controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 public class RatingController {
 
@@ -15,5 +17,6 @@ public class RatingController {
 
     @FXML
     private void btnCancel(ActionEvent actionEvent) {
+        ((Stage) (((Button) actionEvent.getSource()).getScene().getWindow())).close();
     }
 }
