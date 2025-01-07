@@ -16,7 +16,6 @@ public class MovieSearcher {
                 searchResult.add(movie);
             }
         }
-
         return searchResult;
     }
 
