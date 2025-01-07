@@ -2,6 +2,8 @@ package dk.easv.privatemoviecollection.BE;
 
 import javafx.scene.control.IndexRange;
 
+import java.time.LocalDate;
+
 public class Movie {
 
     private int id;
@@ -12,6 +14,9 @@ public class Movie {
         this.id = id;
         this.title = title;
         this.rating = rating;
+    }
+
+    public Movie(int id, String name, float rating, String fileLink, LocalDate lastView) {
     }
 
     public int getId() {

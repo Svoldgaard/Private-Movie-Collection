@@ -1,7 +1,9 @@
 module dk.easv.privatemoviecollection {
     requires javafx.controls;
     requires javafx.fxml;
-    requires javafx.media;  // Add this line
+    requires javafx.media;
+    requires java.sql;
+    requires com.microsoft.sqlserver.jdbc;  // Add this line
 
     opens dk.easv.privatemoviecollection to javafx.fxml;
     exports dk.easv.privatemoviecollection;
