@@ -1,8 +1,9 @@
 package dk.easv.privatemoviecollection.GUI.Controller;
 
-// Java import
+// Project import
 import dk.easv.privatemoviecollection.BE.Movie;
 import dk.easv.privatemoviecollection.MovieMain;
+// Java import
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

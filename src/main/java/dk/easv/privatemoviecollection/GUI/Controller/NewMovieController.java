@@ -1,6 +1,8 @@
 package dk.easv.privatemoviecollection.GUI.Controller;
 
+//Project import
 import dk.easv.privatemoviecollection.BE.Movie;
+// Java import
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
