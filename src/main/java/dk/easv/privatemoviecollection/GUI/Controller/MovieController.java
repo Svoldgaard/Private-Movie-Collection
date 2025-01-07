@@ -31,7 +31,7 @@ public class MovieController {
 
     @FXML
     private void btnAddMovie(ActionEvent actionEvent) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(MovieMain.class.getResource("AddMovie.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(MovieMain.class.getResource("/dk/easv/privatemoviecollection/FXML/AddMovie.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 611, 400);
         Stage stage = new Stage();
         stage.setScene(scene);
@@ -44,7 +44,7 @@ public class MovieController {
 
     @FXML
     private void btnAddCategory(ActionEvent actionEvent) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(MovieMain.class.getResource("AddCategory.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(MovieMain.class.getResource("/dk/easv/privatemoviecollection/FXML/AddCategory.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 611, 400);
         Stage stage = new Stage();
         stage.setScene(scene);
@@ -57,7 +57,7 @@ public class MovieController {
 
     @FXML
     private void btnAddRating(ActionEvent actionEvent) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(MovieMain.class.getResource("AddRating.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(MovieMain.class.getResource("/dk/easv/privatemoviecollection/FXML/AddRating.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 611, 400);
         Stage stage = new Stage();
         stage.setScene(scene);
