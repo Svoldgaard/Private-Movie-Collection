@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="microsoft.sqlserver.mssql.jdbc" type="repository">
+    <properties include-transitive-deps="false" maven-id="com.microsoft.sqlserver:mssql-jdbc:11.2.2.jre18" />
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/microsoft/sqlserver/mssql-jdbc/11.2.2.jre18/mssql-jdbc-11.2.2.jre18.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/microsoft/sqlserver/mssql-jdbc/11.2.2.jre18/mssql-jdbc-11.2.2.jre18-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

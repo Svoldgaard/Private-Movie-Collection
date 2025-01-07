@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="foundation.icon.javaee.api" type="repository">
+    <properties maven-id="foundation.icon:javaee-api:0.9.6" />
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/foundation/icon/javaee-api/0.9.6/javaee-api-0.9.6.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/foundation/icon/javaee-api/0.9.6/javaee-api-0.9.6-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

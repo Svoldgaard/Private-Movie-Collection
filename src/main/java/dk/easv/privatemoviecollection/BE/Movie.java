@@ -54,14 +54,18 @@ public class Movie {
     }
 
     public String getName() {
+        return "";
     }
 
     public Date getDate() {
+        return null;
     }
 
     public String getFileLink() {
+        return "";
     }
 
     public LocalDate getLocalDate() {
+        return null;
     }
 }
