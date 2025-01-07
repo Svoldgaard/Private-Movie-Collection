@@ -2,6 +2,7 @@ package dk.easv.privatemoviecollection.BE;
 
 import javafx.scene.control.IndexRange;
 
+import java.sql.Date;
 import java.time.LocalDate;
 
 public class Movie {
@@ -50,5 +51,17 @@ public class Movie {
                 ", title='" + title + '\'' +
                 ", rating=" + rating +
                 '}';
+    }
+
+    public String getName() {
+    }
+
+    public Date getDate() {
+    }
+
+    public String getFileLink() {
+    }
+
+    public LocalDate getLocalDate() {
     }
 }
