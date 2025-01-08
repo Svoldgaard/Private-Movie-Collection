@@ -129,9 +129,6 @@ public class MovieController {
         stage.show();
     }
 
-    @FXML
-    private void btnDeleteMovie(ActionEvent actionEvent) {
-    }
 
     @FXML
     private void btnAddCategory(ActionEvent actionEvent) throws IOException {
@@ -142,9 +139,6 @@ public class MovieController {
         stage.show();
     }
 
-    @FXML
-    private void btnDeleteCategory(ActionEvent actionEvent) {
-    }
 
     @FXML
     private void btnAddRating(ActionEvent actionEvent) throws IOException {
@@ -161,5 +155,63 @@ public class MovieController {
 
     @FXML
     private void btnPlayPause(ActionEvent actionEvent) {
+    }
+
+    /**
+     *
+     * @param actionEvent
+     */
+    @FXML
+    private void btnDeleteMovie(ActionEvent actionEvent) {
+        TreeItem<String> selectedItem = treeView.getSelectionModel().getSelectedItem();
+
+        if (selectedItem != null && selectedItem.getParent() != null) {
+            String movieTitle = selectedItem.getValue();
+
+            try {
+                // Find movie by title from the model
+                Movie movieToDelete = findMovieByTitle(movieTitle);
+
+                if (movieToDelete != null) {
+                    // Delete from database
+                    movieModel.deleteMovie(movieToDelete);
+
+                    // Remove from TreeView
+                    selectedItem.getParent().getChildren().remove(selectedItem);
+
+                    showAlert("Success", "Movie removed: " + movieTitle);
+                } else {
+                    showAlert("Error", "Movie not found in database.");
+                }
+
+            } catch (Exception e) {
+                displayError(e);
+                e.printStackTrace();
+            }
+        } else {
+            showAlert("Error", "Please select a movie to delete.");
+        }
+    }
+
+    @FXML
+    private void btnDeleteCategory(ActionEvent actionEvent) {
+    }
+
+    // Helper method to find Movie by title from the model
+    private Movie findMovieByTitle(String title) {
+        for (Movie movie : movieModel.getAllMovies()) {
+            if (movie.getName().equalsIgnoreCase(title)) {
+                return movie;
+            }
+        }
+        return null;  // Return null if no match is found
+    }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }
