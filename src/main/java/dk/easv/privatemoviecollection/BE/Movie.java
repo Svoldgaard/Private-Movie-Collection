@@ -1,23 +1,28 @@
 package dk.easv.privatemoviecollection.BE;
 
-import javafx.scene.control.IndexRange;
-
 import java.sql.Date;
 import java.time.LocalDate;
 
 public class Movie {
 
     private int id;
-    private String title;
-    private int rating;
-
-    public Movie(int id, String title, int rating) {
-        this.id = id;
-        this.title = title;
-        this.rating = rating;
-    }
+    private String name;
+    private float rating;
+    private String fileLink;
+    private LocalDate lastView;
+    private String category;  // New field
 
     public Movie(int id, String name, float rating, String fileLink, LocalDate lastView) {
+        this.id = id;
+        this.name = name;
+        this.rating = rating;
+        this.fileLink = fileLink;
+        this.lastView = lastView;
+
+    }
+
+    public String getCategory() {
+        return category;
     }
 
     public int getId() {
@@ -28,44 +33,51 @@ public class Movie {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public int getRating() {
+    public float getRating() {
         return rating;
     }
 
-    public void setRating(int rating) {
+    public void setRating(float rating) {
         this.rating = rating;
+    }
+
+    public String getFileLink() {
+        return fileLink;
+    }
+
+    public void setFileLink(String fileLink) {
+        this.fileLink = fileLink;
+    }
+
+    public Date getLastView() {
+        return Date.valueOf(lastView);
+    }
+
+    public void setLastView(LocalDate lastView) {
+        this.lastView = lastView;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     @Override
     public String toString() {
         return "Movie{" +
                 "id=" + id +
-                ", title='" + title + '\'' +
+                ", name='" + name + '\'' +
                 ", rating=" + rating +
+                ", fileLink='" + fileLink + '\'' +
+                ", lastView=" + lastView +
+                ", category='" + category + '\'' +
                 '}';
-    }
-
-    public String getName() {
-        return "";
-    }
-
-    public Date getDate() {
-        return null;
-    }
-
-    public String getFileLink() {
-        return "";
-    }
-
-    public LocalDate getLocalDate() {
-        return null;
     }
 }

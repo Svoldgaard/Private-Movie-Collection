@@ -61,7 +61,7 @@ public class Movie_DAO implements IMovieDataAccess {
             stmt.setString(2, movie.getName());
             stmt.setFloat(3, movie.getRating());
             stmt.setString(4, movie.getFileLink());
-            stmt.setDate(5, movie.getDate());
+            stmt.setDate(5, movie.getLastView());
 
             // Run the specific SQL statement
             stmt.executeUpdate();
@@ -71,7 +71,7 @@ public class Movie_DAO implements IMovieDataAccess {
             int id = rs.getInt(1);
 
             // Create movie object and send up the layer
-            Movie createdMovie = new Movie (id, movie.getName(), movie.getRating(), movie.getFileLink(), movie.getLocalDate());
+            Movie createdMovie = new Movie (id, movie.getName(), movie.getRating(), movie.getFileLink(), movie.getLastView().toLocalDate());
 
             return createdMovie;
         }
@@ -95,7 +95,7 @@ public class Movie_DAO implements IMovieDataAccess {
             stmt.setString(2, movie.getName());
             stmt.setFloat(3, movie.getRating());
             stmt.setString(4, movie.getFileLink());
-            stmt.setDate(5, movie.getDate());
+            stmt.setDate(5, movie.getLastView());
 
             stmt.executeUpdate();
         }
