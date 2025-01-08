@@ -14,60 +14,52 @@ public class Category_DB implements ICategoryDataAccess {
     public List<Category> getAllCategories() throws Exception
     {
         DB_Connect dbConnect = new DB_Connect();
+        ArrayList<Category> allCategories = new ArrayList<>();
 
-        ArrayList<Category> allCateogries = new ArrayList<>();
-
-        try(Connection conn = dbConnect.getConnection(); Statement stmt = conn.createStatement())
+        try (Connection conn = dbConnect.getConnection(); Statement stmt = conn.createStatement())
         {
             String sql = "SELECT * FROM Category";
             ResultSet rs = stmt.executeQuery(sql);
 
-            while(rs.next())
+            while (rs.next())
             {
                 int id = rs.getInt("ID");
                 String name = rs.getString("Name");
 
                 Category category = new Category(id, name);
-                allCateogries.add(category);
+                allCategories.add(category);
             }
-            return allCateogries;
+            return allCategories;
         }
         catch(SQLException ex)
         {
             ex.printStackTrace();
             throw new Exception("Could not get all categories", ex);
         }
-
     }
 
     @Override
-    public Category createCategory(Category category) throws Exception
-    {
-        String sql = "INSERT INTO dbo.Category(ID, Name) VALUES (?, ?)";
+    public Category createCategory(Category category) throws Exception {
+        String getMaxIdSQL = "SELECT MAX(ID) FROM dbo.Category";
+        String insertCategorySQL = "INSERT INTO dbo.Category(ID, Name) VALUES (?, ?)";
         DB_Connect dbConnect = new DB_Connect();
 
-        try(Connection conn = dbConnect.getConnection())
-        {
-            PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        try (Connection conn = dbConnect.getConnection()) {
+            PreparedStatement getMaxIdStmt = conn.prepareStatement(getMaxIdSQL);
+            ResultSet rs = getMaxIdStmt.executeQuery();
+            int newId = 1;
+            if (rs.next()) {
+                newId = rs.getInt(1) + 1;
+            }
 
-            // Bind parameters
-            stmt.setInt(1, category.getID());
-            stmt.setString(2, category.getName());
+            PreparedStatement insertStmt = conn.prepareStatement(insertCategorySQL);
+            insertStmt.setInt(1, newId);
+            insertStmt.setString(2, category.getName());
+            insertStmt.executeUpdate();
 
-            // Run the specific SQL statement
-            stmt.executeUpdate();
-
-            // Get the generated ID from the DB
-            ResultSet rs = stmt.getGeneratedKeys();
-            int id = rs.getInt(1);
-
-            // Create category object and send up the layer
-            Category createdCategory = new Category(id, category.getName());
-
+            Category createdCategory = new Category(newId, category.getName());
             return createdCategory;
-        }
-        catch(SQLException ex)
-        {
+        } catch (SQLException ex) {
             ex.printStackTrace();
             throw new Exception("Could not create category", ex);
         }
@@ -79,14 +71,13 @@ public class Category_DB implements ICategoryDataAccess {
         String sql = "UPDATE dbo.Category SET Name = ? WHERE ID = ?";
         DB_Connect dbConnect = new DB_Connect();
 
-        try(Connection conn = dbConnect.getConnection();
-        PreparedStatement stmt = conn.prepareStatement(sql))
+        try (Connection conn = dbConnect.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql))
         {
-            //Bind parameters
-            stmt.setInt(1, category.getID());
-            stmt.setString(2, category.getName());
+            // Bind parameters
+            stmt.setString(1, category.getName());
+            stmt.setInt(2, category.getID());
 
-            //Run the specified SQL statement
+            // Execute the SQL statement
             stmt.executeUpdate();
         }
         catch(SQLException ex)
@@ -102,12 +93,12 @@ public class Category_DB implements ICategoryDataAccess {
         String sql = "DELETE FROM dbo.Category WHERE ID = ?";
         DB_Connect dbConnect = new DB_Connect();
 
-        try(Connection conn = dbConnect.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql))
+        try (Connection conn = dbConnect.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql))
         {
             // Bind parameters
             stmt.setInt(1, category.getID());
-            // Run the specified SQL statement
+
+            // Execute the SQL statement
             stmt.executeUpdate();
         }
         catch(SQLException ex)
@@ -116,5 +107,4 @@ public class Category_DB implements ICategoryDataAccess {
             throw new Exception("Could not delete category", ex);
         }
     }
-
 }
