@@ -74,11 +74,9 @@ public class Category_DB implements ICategoryDataAccess {
 
         try (Connection conn = dbConnect.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql))
         {
-            // Bind parameters
             stmt.setString(1, category.getName());
             stmt.setInt(2, category.getID());
 
-            // Execute the SQL statement
             stmt.executeUpdate();
         }
         catch(SQLException ex)
@@ -96,10 +94,8 @@ public class Category_DB implements ICategoryDataAccess {
 
         try (Connection conn = dbConnect.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql))
         {
-            // Bind parameters
             stmt.setInt(1, category.getID());
 
-            // Execute the SQL statement
             stmt.executeUpdate();
         }
         catch(SQLException ex)

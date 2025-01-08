@@ -109,19 +109,21 @@ public class MovieController {
     }
 
 
-    public void addMovieToCategory(String category, String movieTitle) {
+    void addMovieToCategory(String category, String movieTitle) {
         // Create a new movie node
         TreeItem<String> movieNode = new TreeItem<>(movieTitle);
 
         // If the category is not already in categoryNodes, create a new category node
         if (!categoryNodes.containsKey(category)) {
             TreeItem<String> categoryNode = new TreeItem<>(category);
+            categoryNode.setExpanded(true);  // Make categories expandable (optional)
             categoryNodes.put(category, categoryNode);  // Add category node to the map
         }
 
         // Add the movie node to its respective category
         categoryNodes.get(category).getChildren().add(movieNode);
     }
+
 
     @FXML
     private void btnAddMovie(ActionEvent actionEvent) throws IOException {
@@ -135,11 +137,15 @@ public class MovieController {
 
     @FXML
     private void btnAddCategory(ActionEvent actionEvent) throws IOException {
+        // Open a window to add a new category
         FXMLLoader fxmlLoader = new FXMLLoader(MovieMain.class.getResource("/dk/easv/privatemoviecollection/FXML/AddCategory.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 611, 400);
         Stage stage = new Stage();
         stage.setScene(scene);
         stage.show();
+
+        // After category is added, update the TreeView (this should be triggered from the AddCategory controller)
+        initializeTreeView();
     }
 
 
@@ -175,9 +181,8 @@ public class MovieController {
                 Movie movieToDelete = findMovieByTitle(movieTitle);
 
                 if (movieToDelete != null) {
-                    movieModel.deleteMovie(movieToDelete);
-
-                    selectedItem.getParent().getChildren().remove(selectedItem);
+                    movieModel.deleteMovie(movieToDelete);  // Delete from the database
+                    selectedItem.getParent().getChildren().remove(selectedItem);  // Remove from TreeView
 
                     showAlert("Success", "Movie removed: " + movieTitle);
                 } else {
@@ -195,6 +200,23 @@ public class MovieController {
 
     @FXML
     private void btnDeleteCategory(ActionEvent actionEvent) {
+        TreeItem<String> selectedItem = treeView.getSelectionModel().getSelectedItem();
+
+        if (selectedItem != null && selectedItem.getParent() == treeView.getRoot()) {
+            // Confirm that it's a category node
+            String categoryName = selectedItem.getValue();
+
+            // Check if there are any movies under the category
+            if (selectedItem.getChildren().isEmpty()) {
+                categoryNodes.remove(categoryName);  // Remove the category from the map
+                treeView.getRoot().getChildren().remove(selectedItem);  // Remove the category from TreeView
+                showAlert("Success", "Category removed: " + categoryName);
+            } else {
+                showAlert("Error", "Category cannot be deleted because it still has movies.");
+            }
+        } else {
+            showAlert("Error", "Please select a category to delete.");
+        }
     }
 
 

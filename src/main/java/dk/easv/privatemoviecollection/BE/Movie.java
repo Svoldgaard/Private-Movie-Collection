@@ -27,6 +27,9 @@ public class Movie {
         this.rating = rating;
     }
 
+    public Movie(int i, String movieTitle, Float rating, String selectedCategory) {
+    }
+
     public String getCategory() {
         return category;
     }
