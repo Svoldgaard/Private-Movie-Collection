@@ -18,7 +18,7 @@ public class Movie_DAO implements IMovieDataAccess {
         ArrayList<Movie> allMovies = new ArrayList<>();
 
         try(Connection conn = dbConnect.getConnection();
-            Statement stmt = conn .createStatement())
+            Statement stmt = conn.createStatement())
         {
             String sql = "SELECT * FROM movie";
             ResultSet rs = stmt.executeQuery(sql);
