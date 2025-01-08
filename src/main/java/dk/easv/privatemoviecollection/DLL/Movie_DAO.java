@@ -1,5 +1,6 @@
 package dk.easv.privatemoviecollection.DLL;
 // Project import
+import dk.easv.privatemoviecollection.BE.Category;
 import dk.easv.privatemoviecollection.BE.Movie;
 import dk.easv.privatemoviecollection.DLL.DBConnection.DB_Connect;
 // Java import
@@ -7,6 +8,7 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class Movie_DAO implements IMovieDataAccess {
 
@@ -21,6 +23,13 @@ public class Movie_DAO implements IMovieDataAccess {
             Statement stmt = conn.createStatement())
         {
             String sql = "SELECT * FROM movie";
+
+            /*SELECT m.ID, m.Name, m.Rating, c.Category_Name
+            FROM Movie m, Category c, CatMovie cm
+            WHERE m.ID = cm.MovieID -- link movie og junction table
+            AND cm.CategoryID = c.ID -- junction table og category*/
+
+
             ResultSet rs = stmt.executeQuery(sql);
 
             while (rs.next())
@@ -119,5 +128,6 @@ public class Movie_DAO implements IMovieDataAccess {
         }
 
     }
+
 
 }
