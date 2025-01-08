@@ -2,7 +2,8 @@ package dk.easv.privatemoviecollection.GUI.Controller;
 
 //Project import
 import dk.easv.privatemoviecollection.BE.Movie;
-// Java import
+import dk.easv.privatemoviecollection.BE.Category;  // Add this import for Category
+import dk.easv.privatemoviecollection.GUI.Model.CategoryModel;  // Add import for CategoryModel
 import dk.easv.privatemoviecollection.GUI.Model.MovieModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,12 +15,10 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-import static java.lang.Float.*;
-
+import java.util.List;
 
 public class NewMovieController {
 
-    public TextField txtFileLink;
     @FXML
     private TextField txtRating;
     @FXML
@@ -30,41 +29,48 @@ public class NewMovieController {
     private Movie movie;
     private ObservableList<String> categoryList;
 
+    private CategoryModel categoryModel;
 
     public void initialize() {
-
         categoryList = FXCollections.observableArrayList();
 
-        // much data to check if it works
-        categoryList.addAll("Action", "Comedy", "Drama", "Horror", "Sci-Fi");
+        try {
+            categoryModel = new CategoryModel();
+            List<Category> categories = categoryModel.getAllCategories();
 
-        lstCategory.setItems(categoryList);
+            for (Category category : categories) {
+                categoryList.add(category.getName());
+            }
+
+            lstCategory.setItems(categoryList);
+
+        } catch (Exception e) {
+            showAlert("Error", "Failed to load categories from the database.");
+            e.printStackTrace();
+        }
     }
 
     @FXML
     private void btnSave(ActionEvent actionEvent) {
         try {
-
             String movieTitle = txtMovieTitle.getText().trim();
             Float rating = Float.parseFloat(txtRating.getText().trim());
+            String selectedCategory = lstCategory.getSelectionModel().getSelectedItem();  // Get selected category
 
-
-            if (movieTitle.isEmpty() || rating < 0) {
+            if (movieTitle.isEmpty() || rating < 0 || selectedCategory == null) {
                 showAlert("Error", "Please fill in all fields correctly.");
                 return;
             }
 
-            Movie newMovie = new Movie(0, movieTitle, rating);
+            Movie newMovie = new Movie(0, movieTitle, rating, selectedCategory);
 
             MovieModel movieModel = new MovieModel();
             Movie savedMovie = movieModel.addMovie(newMovie);
-
 
             MovieController mainController = new MovieController();
             mainController.addMovieToCategory(savedMovie.getCategory(), savedMovie.getName());
 
             ((Stage) (((Button) actionEvent.getSource()).getScene().getWindow())).close();
-
             showAlert("Success", "Movie added successfully!");
 
         } catch (NumberFormatException e) {
@@ -82,7 +88,6 @@ public class NewMovieController {
         alert.setContentText(message);
         alert.showAndWait();
     }
-
 
     @FXML
     private void btnCancel(ActionEvent actionEvent) {

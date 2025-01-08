@@ -45,7 +45,6 @@ public class CategoryController {
 
     @FXML
     private void btnCancel(ActionEvent actionEvent) {
-        // Close the window when the user clicks "Cancel"
         ((Stage) (((Button) actionEvent.getSource()).getScene().getWindow())).close();
     }
 }
