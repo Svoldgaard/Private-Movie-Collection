@@ -56,20 +56,24 @@ public class Movie_DAO implements IMovieDataAccess {
         {
             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
+            // Bind parameters
             stmt.setInt(1,movie.getId());
             stmt.setString(2, movie.getName());
             stmt.setFloat(3, movie.getRating());
             stmt.setString(4, movie.getFileLink());
             stmt.setDate(5, movie.getDate());
 
+            // Run the specific SQL statement
             stmt.executeUpdate();
 
+            // Get the generated ID from the DB
             ResultSet rs = stmt.getGeneratedKeys();
             int id = rs.getInt(1);
 
-         Movie createdMovie = new Movie (id, movie.getName(), movie.getRating(), movie.getFileLink(), movie.getLocalDate());
+            // Create movie object and send up the layer
+            Movie createdMovie = new Movie (id, movie.getName(), movie.getRating(), movie.getFileLink(), movie.getLocalDate());
 
-         return createdMovie;
+            return createdMovie;
         }
         catch(SQLException ex)
         {
