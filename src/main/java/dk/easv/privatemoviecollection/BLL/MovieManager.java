@@ -1,9 +1,10 @@
 package dk.easv.privatemoviecollection.BLL;
 
+// Projects imports
 import dk.easv.privatemoviecollection.BE.Movie;
 import dk.easv.privatemoviecollection.BLL.Search.MovieSearcher;
 import dk.easv.privatemoviecollection.DLL.Movie_DAO;
-
+// Java imports
 import java.io.IOException;
 import java.util.List;
 

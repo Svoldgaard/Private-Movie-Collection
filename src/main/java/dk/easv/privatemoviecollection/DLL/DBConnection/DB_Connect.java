@@ -1,8 +1,8 @@
 package dk.easv.privatemoviecollection.DLL.DBConnection;
-
+// jdbc imports
 import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
 import com.microsoft.sqlserver.jdbc.SQLServerException;
-
+// Java imports
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;

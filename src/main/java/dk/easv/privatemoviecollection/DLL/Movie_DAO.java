@@ -91,12 +91,14 @@ public class Movie_DAO implements IMovieDataAccess {
         try(Connection conn = dbConnect.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql))
         {
+            //Bind parameters
             stmt.setInt(1,movie.getId());
             stmt.setString(2, movie.getName());
             stmt.setFloat(3, movie.getRating());
             stmt.setString(4, movie.getFileLink());
             stmt.setDate(5, movie.getLastView());
 
+            //Run the specified SQL statement
             stmt.executeUpdate();
         }
         catch(SQLException ex)
@@ -114,7 +116,10 @@ public class Movie_DAO implements IMovieDataAccess {
 
         try(Connection conn = dbConnect.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql))
         {
+            // Bind parameters
             stmt.setInt(1, movie.getId());
+
+            //Run the specified SQL statement
             stmt.executeUpdate();
         }
         catch(SQLException ex)
