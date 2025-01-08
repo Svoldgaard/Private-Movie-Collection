@@ -16,7 +16,7 @@ public class DeleteWindowController {
     }
 
     public void btnContinue(ActionEvent actionEvent) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(MovieMain.class.getResource("/dk/easv/privatemoviecollection/FXML/DeleteWindow.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(MovieMain.class.getResource("/dk/easv/privatemoviecollection/FXML/MainWindow.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 611, 400);
         Stage stage = new Stage();
         stage.setScene(scene);
