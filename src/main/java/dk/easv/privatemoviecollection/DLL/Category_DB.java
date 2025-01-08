@@ -14,22 +14,23 @@ public class Category_DB implements ICategoryDataAccess {
     public List<Category> getAllCategories() throws Exception
     {
         DB_Connect dbConnect = new DB_Connect();
+
         ArrayList<Category> allCategories = new ArrayList<>();
 
-        try (Connection conn = dbConnect.getConnection(); Statement stmt = conn.createStatement())
+        try(Connection conn = dbConnect.getConnection(); Statement stmt = conn.createStatement())
         {
             String sql = "SELECT * FROM Category";
             ResultSet rs = stmt.executeQuery(sql);
 
-            while (rs.next())
+            while(rs.next())
             {
                 int id = rs.getInt("ID");
                 String name = rs.getString("Name");
 
                 Category category = new Category(id, name);
-                allCategories.add(category);
+                allCateogries.add(category);
             }
-            return allCategories;
+            return allCateogries;
         }
         catch(SQLException ex)
         {
@@ -107,4 +108,5 @@ public class Category_DB implements ICategoryDataAccess {
             throw new Exception("Could not delete category", ex);
         }
     }
+
 }
