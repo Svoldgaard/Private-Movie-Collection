@@ -23,7 +23,6 @@ public class Movie_DAO implements IMovieDataAccess {
             String sql = "SELECT * FROM movie";
             ResultSet rs = stmt.executeQuery(sql);
 
-            // Loops through rows from the database result test
             while (rs.next())
             {
                 // Map DB row to Movie object
@@ -56,21 +55,17 @@ public class Movie_DAO implements IMovieDataAccess {
         {
             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
-            // Bind parameters
             stmt.setInt(1,movie.getId());
             stmt.setString(2, movie.getName());
             stmt.setFloat(3, movie.getRating());
             stmt.setString(4, movie.getFileLink());
             stmt.setDate(5, movie.getLastView());
 
-            // Run the specific SQL statement
             stmt.executeUpdate();
 
-            // Get the generated ID from the DB
             ResultSet rs = stmt.getGeneratedKeys();
             int id = rs.getInt(1);
 
-            // Create movie object and send up the layer
             Movie createdMovie = new Movie (id, movie.getName(), movie.getRating(), movie.getFileLink(), movie.getLastView().toLocalDate());
 
             return createdMovie;
@@ -91,14 +86,12 @@ public class Movie_DAO implements IMovieDataAccess {
         try(Connection conn = dbConnect.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql))
         {
-            //Bind parameters
             stmt.setInt(1,movie.getId());
             stmt.setString(2, movie.getName());
             stmt.setFloat(3, movie.getRating());
             stmt.setString(4, movie.getFileLink());
             stmt.setDate(5, movie.getLastView());
 
-            //Run the specified SQL statement
             stmt.executeUpdate();
         }
         catch(SQLException ex)
@@ -116,10 +109,8 @@ public class Movie_DAO implements IMovieDataAccess {
 
         try(Connection conn = dbConnect.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql))
         {
-            // Bind parameters
             stmt.setInt(1, movie.getId());
 
-            //Run the specified SQL statement
             stmt.executeUpdate();
         }
         catch(SQLException ex)

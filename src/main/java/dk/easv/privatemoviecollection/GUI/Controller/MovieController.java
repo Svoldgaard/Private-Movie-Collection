@@ -68,22 +68,30 @@ public class MovieController {
     }
 
     private void initializeTreeView() {
+        // Root item to represent the entire movie collection
         TreeItem<String> rootItem = new TreeItem<>("Movie Collection");
         rootItem.setExpanded(true);
+
+        // Clear previous category nodes (if any)
         categoryNodes.clear();
 
         try {
+            // Fetch all movies from the movie model
             List<Movie> movies = movieModel.getAllMovies();
             for (Movie movie : movies) {
+                // Add each movie to its respective category
                 addMovieToCategory(movie.getCategory(), movie.getName());
             }
         } catch (Exception e) {
             displayError(e);
         }
 
+        // Add all category nodes to the root item
         categoryNodes.values().forEach(rootItem.getChildren()::add);
+
+        // Set the root item for the TreeView
         treeView.setRoot(rootItem);
-        treeView.setShowRoot(true);
+        treeView.setShowRoot(true);  // Optionally, show or hide the root (Movie Collection)
     }
 
     private void updateTreeView(List<Movie> movies) {
@@ -102,12 +110,16 @@ public class MovieController {
 
 
     public void addMovieToCategory(String category, String movieTitle) {
+        // Create a new movie node
         TreeItem<String> movieNode = new TreeItem<>(movieTitle);
 
+        // If the category is not already in categoryNodes, create a new category node
         if (!categoryNodes.containsKey(category)) {
             TreeItem<String> categoryNode = new TreeItem<>(category);
-            categoryNodes.put(category, categoryNode);
+            categoryNodes.put(category, categoryNode);  // Add category node to the map
         }
+
+        // Add the movie node to its respective category
         categoryNodes.get(category).getChildren().add(movieNode);
     }
 
