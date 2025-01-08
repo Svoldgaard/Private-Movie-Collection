@@ -15,7 +15,7 @@ public class Category_DB implements ICategoryDataAccess {
     {
         DB_Connect dbConnect = new DB_Connect();
 
-        ArrayList<Category> allCateogries = new ArrayList<>();
+        ArrayList<Category> allCategories = new ArrayList<>();
 
         try(Connection conn = dbConnect.getConnection(); Statement stmt = conn.createStatement())
         {
@@ -28,9 +28,9 @@ public class Category_DB implements ICategoryDataAccess {
                 String name = rs.getString("Name");
 
                 Category category = new Category(id, name);
-                allCateogries.add(category);
+                allCategories.add(category);
             }
-            return allCateogries;
+            return allCategories;
         }
         catch(SQLException ex)
         {
