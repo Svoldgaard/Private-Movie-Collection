@@ -28,9 +28,9 @@ public class Category_DB implements ICategoryDataAccess {
                 String name = rs.getString("Name");
 
                 Category category = new Category(id, name);
-                allCateogries.add(category);
+                allCategories.add(category);
             }
-            return allCateogries;
+            return allCategories;
         }
         catch(SQLException ex)
         {
