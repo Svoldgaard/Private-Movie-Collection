@@ -21,6 +21,12 @@ public class Movie {
 
     }
 
+    public Movie(int id, String movieTitle, Float rating) {
+        this.id = id;
+        this.name = movieTitle;
+        this.rating = rating;
+    }
+
     public String getCategory() {
         return category;
     }
