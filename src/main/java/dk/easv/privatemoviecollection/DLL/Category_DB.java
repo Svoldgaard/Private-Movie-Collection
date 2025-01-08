@@ -22,10 +22,8 @@ public class Category_DB implements ICategoryDataAccess {
             String sql = "SELECT * FROM Category";
             ResultSet rs = stmt.executeQuery(sql);
 
-            // Loops through rows from the database result test
             while(rs.next())
             {
-                // Map DB row to Movie object
                 int id = rs.getInt("ID");
                 String name = rs.getString("Name");
 

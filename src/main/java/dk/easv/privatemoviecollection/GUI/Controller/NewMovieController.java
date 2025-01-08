@@ -44,28 +44,25 @@ public class NewMovieController {
     @FXML
     private void btnSave(ActionEvent actionEvent) {
         try {
-            // Collect data from text fields
+
             String movieTitle = txtMovieTitle.getText().trim();
             Float rating = Float.parseFloat(txtRating.getText().trim());
 
-            // Basic validation
+
             if (movieTitle.isEmpty() || rating < 0) {
                 showAlert("Error", "Please fill in all fields correctly.");
                 return;
             }
 
-            // Create new movie object
             Movie newMovie = new Movie(0, movieTitle, rating);
 
-            // Save movie to database
             MovieModel movieModel = new MovieModel();
             Movie savedMovie = movieModel.addMovie(newMovie);
 
-            // Update TreeView by notifying the main controller
+
             MovieController mainController = new MovieController();
             mainController.addMovieToCategory(savedMovie.getCategory(), savedMovie.getName());
 
-            // Close the window after successful save
             ((Stage) (((Button) actionEvent.getSource()).getScene().getWindow())).close();
 
             showAlert("Success", "Movie added successfully!");
