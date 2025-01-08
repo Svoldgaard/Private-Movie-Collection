@@ -67,13 +67,10 @@ public class MovieController {
         });
     }
 
-    // test data to show it works
-    // this has to be removed / changed when CRUD is working
-
     private void initializeTreeView() {
         TreeItem<String> rootItem = new TreeItem<>("Movie Collection");
         rootItem.setExpanded(true);
-        categoryNodes.clear();  // Clear previous nodes to avoid duplication
+        categoryNodes.clear();
 
         try {
             List<Movie> movies = movieModel.getAllMovies();
@@ -103,20 +100,14 @@ public class MovieController {
         treeView.setShowRoot(true);
     }
 
-    /*
-    this addMovieToCategory has to be changed when CRUD is implemented to take the correct info 
-     */
 
     public void addMovieToCategory(String category, String movieTitle) {
         TreeItem<String> movieNode = new TreeItem<>(movieTitle);
 
-        // Check if category exists, otherwise create it
         if (!categoryNodes.containsKey(category)) {
             TreeItem<String> categoryNode = new TreeItem<>(category);
             categoryNodes.put(category, categoryNode);
         }
-
-        // Add movie under the correct category
         categoryNodes.get(category).getChildren().add(movieNode);
     }
 
@@ -169,14 +160,11 @@ public class MovieController {
             String movieTitle = selectedItem.getValue();
 
             try {
-                // Find movie by title from the model
                 Movie movieToDelete = findMovieByTitle(movieTitle);
 
                 if (movieToDelete != null) {
-                    // Delete from database
                     movieModel.deleteMovie(movieToDelete);
 
-                    // Remove from TreeView
                     selectedItem.getParent().getChildren().remove(selectedItem);
 
                     showAlert("Success", "Movie removed: " + movieTitle);
@@ -197,14 +185,14 @@ public class MovieController {
     private void btnDeleteCategory(ActionEvent actionEvent) {
     }
 
-    // Helper method to find Movie by title from the model
+
     private Movie findMovieByTitle(String title) {
         for (Movie movie : movieModel.getAllMovies()) {
             if (movie.getName().equalsIgnoreCase(title)) {
                 return movie;
             }
         }
-        return null;  // Return null if no match is found
+        return null;
     }
 
     private void showAlert(String title, String message) {
