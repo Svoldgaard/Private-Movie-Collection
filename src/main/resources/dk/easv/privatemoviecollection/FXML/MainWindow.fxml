@@ -8,20 +8,21 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.media.MediaView?>
+<?import javafx.scene.text.Text?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="432.0" prefWidth="868.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.privatemoviecollection.GUI.Controller.MovieController">
    <children>
-      <Button layoutX="24.0" layoutY="351.0" mnemonicParsing="false" onAction="#btnAddMovie" text="Add Movie" />
-      <Button layoutX="111.0" layoutY="351.0" mnemonicParsing="false" onAction="#btnDeleteMovie" text="Delete Movie" />
-      <TextField fx:id="txtSearch" layoutX="23.0" layoutY="51.0" promptText="Search" />
-      <Button layoutX="374.0" layoutY="351.0" mnemonicParsing="false" onAction="#btnAddCategory" text="Add Category" />
-      <Button layoutX="475.0" layoutY="351.0" mnemonicParsing="false" onAction="#btnDeleteCategory" text="Delete Category" />
-      <Button layoutX="210.0" layoutY="351.0" mnemonicParsing="false" onAction="#btnAddRating" text="Add rating" />
-      <Button layoutX="291.0" layoutY="351.0" mnemonicParsing="false" onAction="#btnEditRating" text="Edit Rating" />
+      <Button layoutX="201.0" layoutY="312.0" mnemonicParsing="false" onAction="#btnAddMovie" text="Add Movie" />
+      <Button layoutX="201.0" layoutY="351.0" mnemonicParsing="false" onAction="#btnDeleteMovie" text="Delete Movie" />
+      <TextField fx:id="txtSearch" layoutX="23.0" layoutY="34.0" promptText="Search" />
+      <Button layoutX="27.0" layoutY="312.0" mnemonicParsing="false" onAction="#btnAddCategory" text="Add Category" />
+      <Button layoutX="27.0" layoutY="351.0" mnemonicParsing="false" onAction="#btnDeleteCategory" text="Delete Category" />
+      <Button layoutX="530.0" layoutY="312.0" mnemonicParsing="false" onAction="#btnAddRating" text="Add rating" />
+      <Button layoutX="529.0" layoutY="351.0" mnemonicParsing="false" onAction="#btnEditRating" text="Edit Rating" />
       <MediaView fitHeight="200.0" fitWidth="200.0" layoutX="634.0" layoutY="100.0" opacity="0.0" />
       <Button layoutX="703.0" layoutY="325.0" mnemonicParsing="false" onAction="#btnPlayPause" text="Play/Pause" />
       <Slider fx:id="movieDuration" layoutX="664.0" layoutY="300.0" />
-      <Button layoutX="583.0" layoutY="351.0" mnemonicParsing="false" onAction="#btnEditMovie" text="Edit Movie" />
+      <Button layoutX="300.0" layoutY="312.0" mnemonicParsing="false" onAction="#btnEditMovie" text="Edit Movie" />
       <ListView fx:id="lstCategory" layoutX="23.0" layoutY="100.0" prefHeight="200.0" prefWidth="150.0" />
       <TableView fx:id="tblMovie" layoutX="191.0" layoutY="100.0" prefHeight="200.0" prefWidth="412.0">
         <columns>
@@ -31,5 +32,7 @@
             <TableColumn fx:id="colPRating" prefWidth="102.40011596679688" text="Personal Rating" />
         </columns>
       </TableView>
+      <Text layoutX="24.0" layoutY="83.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Category" />
+      <Text layoutX="194.0" layoutY="83.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Movie" />
    </children>
 </AnchorPane>
