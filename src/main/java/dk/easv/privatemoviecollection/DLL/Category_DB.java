@@ -42,24 +42,31 @@ public class Category_DB implements ICategoryDataAccess {
     @Override
     public Category createCategory(Category category) throws Exception {
         DB_Connect dbConnect = new DB_Connect();
-        String getMaxIdSQL = "SELECT MAX(ID) FROM dbo.Category";
-        String insertCategorySQL = "INSERT INTO dbo.Category(CName) VALUES (?, ?)";
-
+        String insertCategorySQL = "INSERT INTO dbo.Category(CName) VALUES (?)";
 
         try (Connection conn = dbConnect.getConnection()) {
-            PreparedStatement getMaxIdStmt = conn.prepareStatement(getMaxIdSQL);
-            ResultSet rs = getMaxIdStmt.executeQuery();
-            int newCName = 1;
-            if (rs.next()) {
-                newCName = rs.getInt(1);
+            // Create a prepared statement to insert the category
+            PreparedStatement stmt = conn.prepareStatement(insertCategorySQL, Statement.RETURN_GENERATED_KEYS);
+
+            // Set the CName parameter
+            stmt.setString(1, category.getName());
+
+            // Execute the update
+            int affectedRows = stmt.executeUpdate();
+
+            // Ensure the insert was successful and retrieve the generated ID
+            if (affectedRows == 0) {
+                throw new SQLException("Creating category failed, no rows affected.");
             }
 
-            PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-
-            stmt.setString(2, movie.getName());
-
-            Category createdCategory = new Category(newId, category.getName());
-            return createdCategory;
+            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    int newId = generatedKeys.getInt(1); // Retrieve the auto-generated ID
+                    return new Category(newId, category.getName()); // Create and return the new category object
+                } else {
+                    throw new SQLException("Creating category failed, no ID obtained.");
+                }
+            }
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw new Exception("Could not create category", ex);
