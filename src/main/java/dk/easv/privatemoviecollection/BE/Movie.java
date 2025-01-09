@@ -10,7 +10,7 @@ public class Movie {
     private float rating;
     private String fileLink;
     private LocalDate lastView;
-    private String category;  // New field
+    private Category category;
 
     public Movie(int id, String name, float rating, String fileLink, LocalDate lastView) {
         this.id = id;
@@ -21,6 +21,15 @@ public class Movie {
 
     }
 
+    public Movie(int id, String name, float rating, String fileLink, LocalDate lastView, Category category) {
+        this.id = id;
+        this.name = name;
+        this.rating = rating;
+        this.fileLink = fileLink;
+        this.lastView = lastView;
+        this.category = category;
+    }
+
     public Movie(int id, String movieTitle, Float rating) {
         this.id = id;
         this.name = movieTitle;
@@ -28,10 +37,6 @@ public class Movie {
     }
 
     public Movie(int i, String movieTitle, Float rating, String selectedCategory) {
-    }
-
-    public String getCategory() {
-        return category;
     }
 
     public int getId() {
@@ -74,8 +79,12 @@ public class Movie {
         this.lastView = lastView;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public Category getCategory() {
+        return category;
     }
 
     @Override
@@ -84,9 +93,7 @@ public class Movie {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", rating=" + rating +
-                ", fileLink='" + fileLink + '\'' +
-                ", lastView=" + lastView +
-                ", category='" + category + '\'' +
+                ", category=" + (category != null ? category.getName() : "No Category") +
                 '}';
     }
 }
