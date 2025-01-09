@@ -11,33 +11,35 @@ import java.util.List;
 public class Category_DB implements ICategoryDataAccess {
 
     @Override
-    public List<Category> getAllCategories() throws Exception
-    {
+    public List<Category> getAllCategories() throws Exception {
         DB_Connect dbConnect = new DB_Connect();
-
         ArrayList<Category> allCategories = new ArrayList<>();
 
-        try(Connection conn = dbConnect.getConnection(); Statement stmt = conn.createStatement())
-        {
+        try (Connection conn = dbConnect.getConnection(); Statement stmt = conn.createStatement()) {
+            // Debugging: Log the actual SQL query to confirm it's correct
             String sql = "SELECT * FROM category";
+            System.out.println("Executing SQL query: " + sql);
+
             ResultSet rs = stmt.executeQuery(sql);
 
-            while(rs.next())
-            {
+            while (rs.next()) {
                 int id = rs.getInt("ID");
                 String name = rs.getString("CName");
 
                 Category category = new Category(id, name);
                 allCategories.add(category);
             }
+
+            // Debugging: Log the results
+            System.out.println("Fetched categories: " + allCategories.size());
+
             return allCategories;
-        }
-        catch(SQLException ex)
-        {
+        } catch (SQLException ex) {
             ex.printStackTrace();
             throw new Exception("Could not get all categories", ex);
         }
     }
+
 
     @Override
     public Category createCategory(Category category) throws Exception {
@@ -45,24 +47,21 @@ public class Category_DB implements ICategoryDataAccess {
         String insertCategorySQL = "INSERT INTO dbo.Category(CName) VALUES (?)";
 
         try (Connection conn = dbConnect.getConnection()) {
-            // Create a prepared statement to insert the category
             PreparedStatement stmt = conn.prepareStatement(insertCategorySQL, Statement.RETURN_GENERATED_KEYS);
 
-            // Set the CName parameter
             stmt.setString(1, category.getName());
 
-            // Execute the update
             int affectedRows = stmt.executeUpdate();
 
-            // Ensure the insert was successful and retrieve the generated ID
+
             if (affectedRows == 0) {
                 throw new SQLException("Creating category failed, no rows affected.");
             }
 
             try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
-                    int newId = generatedKeys.getInt(1); // Retrieve the auto-generated ID
-                    return new Category(newId, category.getName()); // Create and return the new category object
+                    int newId = generatedKeys.getInt(1);
+                    return new Category(newId, category.getName());
                 } else {
                     throw new SQLException("Creating category failed, no ID obtained.");
                 }

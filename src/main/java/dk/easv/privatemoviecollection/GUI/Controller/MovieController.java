@@ -9,6 +9,7 @@ import dk.easv.privatemoviecollection.GUI.Model.MovieModel;
 import dk.easv.privatemoviecollection.MovieMain;
 
 // Java imports
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -117,7 +118,10 @@ public class MovieController {
     }
 
     public void refreshCategory() {
-        lstCategory.setItems(categoryModel.getObservableCategory());
+        Platform.runLater(() -> {
+            lstCategory.setItems(null);
+            lstCategory.setItems(categoryModel.getObservableCategory());
+        });
     }
 
     @FXML
@@ -136,11 +140,12 @@ public class MovieController {
         Stage stage = new Stage();
         stage.setScene(scene);
 
-        // Pass this MovieController instance to CategoryController
         CategoryController controller = fxmlLoader.getController();
         controller.setMovieController(this);
 
         stage.showAndWait();
+
+        refreshCategory();
     }
 
     @FXML
@@ -157,12 +162,12 @@ public class MovieController {
 
     @FXML
     private void btnEditRating(ActionEvent actionEvent) {
-        // Implementation of editing rating goes here
+
     }
 
     @FXML
     private void btnPlayPause(ActionEvent actionEvent) {
-        // Implementation of play/pause functionality goes here
+
     }
 
     private void showAlert(String title, String message) {
@@ -203,6 +208,6 @@ public class MovieController {
     }
 
     public void btnAddRating(ActionEvent actionEvent) {
-        // Implementation of adding rating goes here
+        
     }
 }
