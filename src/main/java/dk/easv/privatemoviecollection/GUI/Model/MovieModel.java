@@ -21,8 +21,10 @@
         }
 
 
-       public List<Movie> searchMovie(String query) throws Exception {
-            return movieManager.searchMovies(query);
+        public void searchMovie(String query) throws Exception {
+            List<Movie> searchResults = movieManager.searchMovies(query);
+            tblMovie.clear();
+            tblMovie.addAll(searchResults);
         }
 
 

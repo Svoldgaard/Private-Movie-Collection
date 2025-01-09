@@ -75,7 +75,7 @@ public class MovieController {
 
         txtSearch.textProperty().addListener((observableValue, oldValue, newValue) -> {
             try {
-                List<Movie> searchResults = movieModel.searchMovie(newValue);
+                movieModel.searchMovie(newValue);
             } catch (Exception e) {
                 displayError(e);
                 e.printStackTrace();
