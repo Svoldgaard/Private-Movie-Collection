@@ -2,11 +2,13 @@ package dk.easv.privatemoviecollection.DLL.DBConnection;
 // jdbc imports
 import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
 import com.microsoft.sqlserver.jdbc.SQLServerException;
+import dk.easv.privatemoviecollection.BE.Movie;
 // Java imports
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
+import java.util.List;
 import java.util.Properties;
 
 public class DB_Connect {
@@ -24,6 +26,10 @@ public class DB_Connect {
         dataSource.setPassword(databaseProperties.getProperty("Password"));
         dataSource.setPortNumber(1433);
         dataSource.setTrustServerCertificate(true);
+    }
+
+    public static List<Movie> getAllMovies() {
+            return null;
     }
 
     public Connection getConnection() throws SQLServerException {

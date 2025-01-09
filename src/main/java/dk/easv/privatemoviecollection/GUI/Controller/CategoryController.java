@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TreeItem;
 import javafx.stage.Stage;
 
 public class CategoryController {
@@ -47,4 +48,11 @@ public class CategoryController {
     private void btnCancel(ActionEvent actionEvent) {
         ((Stage) (((Button) actionEvent.getSource()).getScene().getWindow())).close();
     }
-}
+
+    void MovieMain(MovieController movieController) {
+    }
+
+    void setCategoryController(TreeItem<String> movieController) {
+    }
+
+    }

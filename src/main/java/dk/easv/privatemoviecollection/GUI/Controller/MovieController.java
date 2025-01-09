@@ -2,17 +2,23 @@ package dk.easv.privatemoviecollection.GUI.Controller;
 
 // Project import
 import dk.easv.privatemoviecollection.BE.Movie;
+import dk.easv.privatemoviecollection.DLL.DBConnection.DB_Connect;
 import dk.easv.privatemoviecollection.GUI.Model.MovieModel;
 import dk.easv.privatemoviecollection.MovieMain;
 
 // Java import
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+
 import java.io.IOException;
+import java.text.BreakIterator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -238,4 +244,57 @@ public class MovieController {
     }
 
 
+    @FXML
+    private boolean btnEditMovie() throws Exception {
+
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/dk/easv/privatemoviecollection/FXML/AddMovie.fxml"));
+            Parent root = fxmlLoader.load();
+
+            NewMovieController controller = fxmlLoader.getController();
+            controller.MovieMain(this);
+            controller.setMovieController(this);
+
+            Stage stage = new Stage();
+
+            Object ActionEvent = null;
+            if (ActionEvent == null) {}
+            Object selectedTreeView = null;
+            {
+                stage.setTitle("New Playlist");
+                controller.initializeForEdit(selectedTreeView);
+            }
+
+            TreeItem<String> selectMovieManager = null;
+            if (ActionEvent == null) {
+                stage.setTitle("Edit Playlist");
+                selectMovieManager = treeView.getSelectionModel().getSelectedItem();
+            }
+
+            if (selectMovieManager != null) {
+                controller.initialize(selectedTreeView);
+            } else {
+                System.out.println("No Category is selected to edit!");
+                return false;
+            }
+            stage.setScene(new Scene(root));
+            stage.show();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+
+            DB_Connect databaseConenctor = new DB_Connect();
+            List<Movie> movies = DB_Connect.getAllMovies();
+
+            ObservableList<Movie> MovieList = FXCollections.observableList(movies);
+
+            ListView<Movie> txtMovieTitel = new ListView<>(MovieList);
+            boolean Category = false;
+            treeView.setEditable(Category);
+        }
+        return false;
+    }
+
+
 }
+
