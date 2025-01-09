@@ -9,7 +9,6 @@ import dk.easv.privatemoviecollection.GUI.Model.MovieModel;
 import dk.easv.privatemoviecollection.MovieMain;
 
 // Java imports
-// Java import
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -19,7 +18,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.text.BreakIterator;
 import java.util.HashMap;
@@ -31,23 +29,23 @@ public class MovieController {
     @FXML
     private TextField txtSearch;
 
-    @FXML
-    private TreeView<Object> treeView;
+   @FXML
+    private Slider movieDuration;
 
     @FXML
-    private Slider movieDuration;
+    private ListView<Category> lstCategory;
+
+    @FXML
+    private TableView<Movie> tblMovie;
 
     private MovieModel movieModel;
     private CategoryModel categoryModel;
-
-    private final Map<String, TreeItem<Object>> categoryNodes = new HashMap<>();
 
     public MovieController() {
         try {
             movieModel = new MovieModel();
             categoryModel = new CategoryModel();
 
-            categoryModel.loadAllCategories();
         } catch (Exception e) {
             displayError(e);
             e.printStackTrace();
@@ -63,99 +61,19 @@ public class MovieController {
     }
 
     public void initialize() {
-        try {
-            initializeTreeView();
-        } catch (Exception e) {
-            displayError(e);
-        }
-
 
         txtSearch.textProperty().addListener((observableValue, oldValue, newValue) -> {
             try {
                 List<Movie> searchResults = movieModel.searchMovie(newValue);
-                updateTreeView(searchResults);
             } catch (Exception e) {
                 displayError(e);
                 e.printStackTrace();
             }
         });
-    }
 
-    private void initializeTreeView() throws Exception {
-        TreeItem<Object> rootItem = new TreeItem<>("Movie Collection");
-        rootItem.setExpanded(true);
+        tblMovie.setItems(movieModel.getObservableMovies());
+        lstCategory.setItems(categoryModel.getObservableCategory());
 
-        categoryNodes.clear();
-
-        List<Category> categories = categoryModel.getAllCategories();
-        for (Category category : categories) {
-            TreeItem<Object> categoryNode = new TreeItem<>(category);
-            categoryNode.setExpanded(true);
-            categoryNodes.put(category.getName(), categoryNode);
-            rootItem.getChildren().add(categoryNode);
-        }
-
-        List<Movie> movies = movieModel.getAllMovies();
-        for (Movie movie : movies) {
-
-            addMovieToCategory(movie.getCategory(), movie.getName());
-        }
-
-        treeView.setRoot(rootItem);
-        treeView.setShowRoot(true);
-
-        treeView.setCellFactory(tv -> new TreeCell<>() {
-            @Override
-            protected void updateItem(Object item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setText(null);
-                } else if (item instanceof Movie) {
-                    setText(((Movie) item).getName());
-                } else if (item instanceof Category) {
-
-                    Category category = (Category) item;
-                    if (category != null && category.getName() != null) {
-                        setText(category.getName());
-                    } else {
-                        setText("No Category");
-                    }
-                } else {
-                    setText(item.toString());
-                }
-            }
-        });
-    }
-
-
-
-    private void updateTreeView(List<Movie> movies) {
-        TreeItem<Object> rootItem = new TreeItem<>("Movie Collection");
-        rootItem.setExpanded(true);
-
-        categoryNodes.clear();
-
-        for (Movie movie : movies) {
-            addMovieToCategory(movie.getCategory(), String.valueOf(movie));
-        }
-
-
-        categoryNodes.values().forEach(rootItem.getChildren()::add);
-
-        treeView.setRoot(rootItem);
-        treeView.setShowRoot(true);
-    }
-
-    void addMovieToCategory(Category category, String movie) {
-        TreeItem<Object> movieNode = new TreeItem<>(movie);
-
-        categoryNodes.computeIfAbsent(category.getName(), name -> {
-            TreeItem<Object> categoryNode = new TreeItem<>(category);
-            categoryNode.setExpanded(true);
-            return categoryNode;
-        });
-
-        categoryNodes.get(category.getName()).getChildren().add(movieNode);
     }
 
     @FXML
@@ -175,20 +93,12 @@ public class MovieController {
         stage.setScene(scene);
         stage.show();
 
-
-        try {
-            categoryModel.loadAllCategories();
-            initializeTreeView();
-        } catch (Exception e) {
-            displayError(e);
-        }
     }
 
     @FXML
     private void btnDeleteMovie(ActionEvent actionEvent) {
-        TreeItem<Object> selectedItem = treeView.getSelectionModel().getSelectedItem();
 
-        if (selectedItem != null && selectedItem.getValue() instanceof Movie) {
+        /*if (selectedItem != null && selectedItem.getValue() instanceof Movie) {
             Movie selectedMovie = (Movie) selectedItem.getValue();
             try {
                 movieModel.deleteMovie(selectedMovie);
@@ -200,7 +110,7 @@ public class MovieController {
             }
         } else {
             showAlert("Error", "Please select a movie to delete.");
-        }
+        }*/
     }
 
     @FXML
@@ -233,40 +143,11 @@ public class MovieController {
 
             Stage stage = new Stage();
 
-            Object ActionEvent = null;
-            if (ActionEvent == null) {}
-            Object selectedTreeView = null;
-            {
-                stage.setTitle("New Playlist");
-                controller.initializeForEdit(selectedTreeView);
-            }
-
-            TreeItem<Object> selectMovieManager = null;
-            if (ActionEvent == null) {
-                stage.setTitle("Edit Playlist");
-                selectMovieManager = treeView.getSelectionModel().getSelectedItem();
-            }
-
-            if (selectMovieManager != null) {
-                controller.initialize(selectedTreeView);
-            } else {
-                System.out.println("No Category is selected to edit!");
-                return false;
-            }
             stage.setScene(new Scene(root));
             stage.show();
         }
         catch (IOException e) {
             e.printStackTrace();
-
-            DB_Connect databaseConenctor = new DB_Connect();
-            List<Movie> movies = DB_Connect.getAllMovies();
-
-            ObservableList<Movie> MovieList = FXCollections.observableList(movies);
-
-            ListView<Movie> txtMovieTitel = new ListView<>(MovieList);
-            boolean Category = false;
-            treeView.setEditable(Category);
         }
         return false;
     }

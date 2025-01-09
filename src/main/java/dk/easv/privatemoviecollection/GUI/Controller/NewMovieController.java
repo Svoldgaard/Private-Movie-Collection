@@ -68,9 +68,6 @@ public class NewMovieController {
             MovieModel movieModel = new MovieModel();
             Movie savedMovie = movieModel.addMovie(newMovie);
 
-            MovieController mainController = new MovieController();
-            mainController.addMovieToCategory(savedMovie.getCategory(), savedMovie.getName());
-
             ((Stage) (((Button) actionEvent.getSource()).getScene().getWindow())).close();
             showAlert("Success", "Movie added successfully!");
 

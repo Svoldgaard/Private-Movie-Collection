@@ -2,30 +2,26 @@
 
     import dk.easv.privatemoviecollection.BE.Movie;
     import dk.easv.privatemoviecollection.BLL.MovieManager;
+    import javafx.collections.FXCollections;
+    import javafx.collections.ObservableList;
 
     import java.util.List;
+
 
     public class MovieModel {
         private MovieManager movieManager;
         private List<Movie> allMovies;
 
+        private ObservableList<Movie> tblMovie;
+
         public MovieModel() throws Exception {
             movieManager = new MovieManager();
-            loadAllMovies();
+            tblMovie = FXCollections.observableArrayList();
+            tblMovie.addAll(movieManager.getAllMovies());
         }
 
 
-        public void loadAllMovies() throws Exception {
-            allMovies = movieManager.getAllMovies();
-        }
-
-
-        public List<Movie> getAllMovies() {
-            return allMovies;
-        }
-
-
-        public List<Movie> searchMovie(String query) throws Exception {
+       public List<Movie> searchMovie(String query) throws Exception {
             return movieManager.searchMovies(query);
         }
 
@@ -45,6 +41,10 @@
 
         public void updateMovie(Movie movie) throws Exception {
             movieManager.updateMovie(movie);
-            loadAllMovies();
+
+        }
+
+        public ObservableList<Movie> getObservableMovies() {
+            return tblMovie;
         }
     }
