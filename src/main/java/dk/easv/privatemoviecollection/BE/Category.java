@@ -10,6 +10,14 @@ public class Category {
         this.name = name;
     }
 
+    public Category(String name){
+        this.name = name;
+    }
+
+    public Category() {
+
+    }
+
     public int getID() {
         return ID;
     }
@@ -29,8 +37,7 @@ public class Category {
     @Override
     public String toString() {
         return "Category{" +
-                "ID=" + ID +
-                ", name='" + name + '\'' +
+                "name='" + name + '\'' +
                 '}';
     }
 }
