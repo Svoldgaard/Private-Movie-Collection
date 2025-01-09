@@ -9,6 +9,7 @@ import dk.easv.privatemoviecollection.GUI.Model.MovieModel;
 import dk.easv.privatemoviecollection.MovieMain;
 
 // Java imports
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -19,18 +20,15 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+
 import java.io.IOException;
-import java.text.BreakIterator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class MovieController {
 
     @FXML
     private TextField txtSearch;
 
-   @FXML
+    @FXML
     private Slider movieDuration;
 
     @FXML
@@ -41,14 +39,16 @@ public class MovieController {
 
     private MovieModel movieModel;
     private CategoryModel categoryModel;
-    @FXML
-    private TableColumn<Movie, Integer> colID;
+
     @FXML
     private TableColumn<Movie, String> colName;
+
     @FXML
     private TableColumn<Movie, Float> colRating;
+
     @FXML
     private TableColumn<Movie, String> colCategory;
+
     @FXML
     private TableColumn<Movie, Float> colPRating;
 
@@ -56,7 +56,6 @@ public class MovieController {
         try {
             movieModel = new MovieModel();
             categoryModel = new CategoryModel();
-
         } catch (Exception e) {
             displayError(e);
             e.printStackTrace();
@@ -72,36 +71,54 @@ public class MovieController {
     }
 
     public void initialize() {
+        // Configure TableView columns
+        colName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        colRating.setCellValueFactory(new PropertyValueFactory<>("rating"));
+        colCategory.setCellValueFactory(new PropertyValueFactory<>("category"));
+        colPRating.setCellValueFactory(new PropertyValueFactory<>("personalRating"));
 
-        txtSearch.textProperty().addListener((observableValue, oldValue, newValue) -> {
-            try {
-                movieModel.searchMovie(newValue);
-            } catch (Exception e) {
-                displayError(e);
-                e.printStackTrace();
+        // Custom Cell Value Factory for Category (shows category name)
+        colCategory.setCellValueFactory(cellData -> {
+            Category category = cellData.getValue().getCategory();
+            return new SimpleStringProperty(category != null ? category.getName() : "No Category");
+        });
+
+        // Populate ListView with categories
+        lstCategory.setItems(categoryModel.getObservableCategory());
+
+        // Populate TableView with all movies initially
+        tblMovie.setItems(movieModel.getObservableMovies());
+
+        // Add listener for category selection
+        lstCategory.getSelectionModel().selectedItemProperty().addListener((observable, oldCategory, newCategory) -> {
+            if (newCategory != null) {
+                try {
+                    ObservableList<Movie> filteredMovies = movieModel.getMoviesByCategory(newCategory);
+                    tblMovie.setItems(filteredMovies);
+                } catch (Exception e) {
+                    displayError(e);
+                }
             }
         });
 
-        colName.setCellValueFactory(new PropertyValueFactory<>("Name"));
-        colRating.setCellValueFactory(new PropertyValueFactory<>("IMDB Rating"));
-        colCategory.setCellValueFactory(new PropertyValueFactory<>("Category"));
-        colPRating.setCellValueFactory(new PropertyValueFactory<>("Personal Rating"));
-
-        tblMovie.setItems(movieModel.getObservableMovies());
-        lstCategory.setItems(categoryModel.getObservableCategory());
-
-
+        // Add search functionality
+        txtSearch.textProperty().addListener((observableValue, oldValue, newValue) -> {
+            try {
+                movieModel.searchMovie(newValue);
+                tblMovie.setItems(movieModel.getObservableMovies());
+            } catch (Exception e) {
+                displayError(e);
+            }
+        });
     }
 
     public void refreshMovie() {
         tblMovie.setItems(movieModel.getObservableMovies());
     }
 
-    public void refreshCategory(){
-
+    public void refreshCategory() {
         lstCategory.setItems(categoryModel.getObservableCategory());
     }
-
 
     @FXML
     private void btnAddMovie(ActionEvent actionEvent) throws IOException {
@@ -118,25 +135,34 @@ public class MovieController {
         Scene scene = new Scene(fxmlLoader.load());
         Stage stage = new Stage();
         stage.setScene(scene);
-        stage.show();
 
+        // Pass this MovieController instance to CategoryController
+        CategoryController controller = fxmlLoader.getController();
+        controller.setMovieController(this);
+
+        stage.showAndWait();
     }
 
     @FXML
     private void btnDeleteMovie(ActionEvent actionEvent) throws Exception {
         Movie selectedMovie = tblMovie.getSelectionModel().getSelectedItem();
 
-        if(selectedMovie != null){
+        if (selectedMovie != null) {
             movieModel.deleteMovie(selectedMovie);
+            refreshMovie();
+        } else {
+            showAlert("No Selection", "Please select a movie to delete.");
         }
     }
 
     @FXML
     private void btnEditRating(ActionEvent actionEvent) {
+        // Implementation of editing rating goes here
     }
 
     @FXML
     private void btnPlayPause(ActionEvent actionEvent) {
+        // Implementation of play/pause functionality goes here
     }
 
     private void showAlert(String title, String message) {
@@ -147,10 +173,8 @@ public class MovieController {
         alert.showAndWait();
     }
 
-
     @FXML
     private boolean btnEditMovie() throws Exception {
-
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/dk/easv/privatemoviecollection/FXML/AddMovie.fxml"));
             Parent root = fxmlLoader.load();
@@ -160,24 +184,25 @@ public class MovieController {
             controller.setMovieController(this);
 
             Stage stage = new Stage();
-
             stage.setScene(new Scene(root));
             stage.show();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return false;
     }
 
-
     public void btnDeleteCategory(ActionEvent actionEvent) throws Exception {
         Category selectedCategory = lstCategory.getSelectionModel().getSelectedItem();
-        if(selectedCategory != null){
+        if (selectedCategory != null) {
             categoryModel.deleteCategory(selectedCategory);
+            refreshCategory();
+        } else {
+            showAlert("No Selection", "Please select a category to delete.");
         }
     }
 
     public void btnAddRating(ActionEvent actionEvent) {
+        // Implementation of adding rating goes here
     }
 }

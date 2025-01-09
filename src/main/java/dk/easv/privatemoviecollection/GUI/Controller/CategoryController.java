@@ -6,7 +6,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TreeItem;
 import javafx.stage.Stage;
 
 public class CategoryController {
@@ -15,11 +14,14 @@ public class CategoryController {
     private TextField txtCategory;
 
     private CategoryModel categoryModel;
-    private MovieController movieController;
+    private MovieController movieController; // Reference to the actual MovieController instance
 
     public CategoryController() throws Exception {
         categoryModel = new CategoryModel();
-        movieController = new MovieController();
+    }
+
+    public void setMovieController(MovieController movieController) {
+        this.movieController = movieController;
     }
 
     @FXML
@@ -27,22 +29,23 @@ public class CategoryController {
 
         String categoryName = txtCategory.getText();
 
-
         if (categoryName != null && !categoryName.isEmpty()) {
             Category newCategory = new Category(-1, categoryName);
             try {
-                movieController = new MovieController();
-
+                // Add the category to the model
                 categoryModel.addCategories(newCategory);
-                movieController.refreshCategory();
 
+                // Refresh the category list in the MovieController
+                if (movieController != null) {
+                    movieController.refreshCategory();
+                }
+
+                // Close the window
                 ((Stage) (((Button) actionEvent.getSource()).getScene().getWindow())).close();
             } catch (Exception e) {
                 e.printStackTrace();
-
             }
         } else {
-
             System.out.println("Category name cannot be empty.");
         }
     }
@@ -51,11 +54,4 @@ public class CategoryController {
     private void btnCancel(ActionEvent actionEvent) {
         ((Stage) (((Button) actionEvent.getSource()).getScene().getWindow())).close();
     }
-
-    void MovieMain(MovieController movieController) {
-    }
-
-    void setCategoryController(TreeItem<String> movieController) {
-    }
-
-    }
+}

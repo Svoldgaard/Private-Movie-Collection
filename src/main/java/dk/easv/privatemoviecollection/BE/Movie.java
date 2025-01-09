@@ -10,15 +10,25 @@ public class Movie {
     private float rating;
     private String fileLink;
     private LocalDate lastView;
+    private float personalRating;
     private Category category;
 
-    public Movie(int id, String name, float rating, String fileLink, LocalDate lastView) {
+    public Movie(int id, String name, float rating, String fileLink, LocalDate lastView,float personalRating) {
         this.id = id;
         this.name = name;
         this.rating = rating;
         this.fileLink = fileLink;
         this.lastView = lastView;
+        this.personalRating = personalRating;
 
+    }
+
+    public float getPersonalRating() {
+        return personalRating;
+    }
+
+    public void setPersonalRating(float personalRating) {
+        this.personalRating = personalRating;
     }
 
     public Movie(int id, String name, float rating, String fileLink, LocalDate lastView, Category category) {

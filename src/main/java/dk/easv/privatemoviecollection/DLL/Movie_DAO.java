@@ -63,18 +63,18 @@ public class Movie_DAO implements IMovieDataAccess {
         {
             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
-            stmt.setInt(1,movie.getId());
             stmt.setString(2, movie.getName());
             stmt.setFloat(3, movie.getRating());
             stmt.setString(4, movie.getFileLink());
             stmt.setDate(5, movie.getLastView());
+
 
             stmt.executeUpdate();
 
             ResultSet rs = stmt.getGeneratedKeys();
             int id = rs.getInt(1);
 
-            Movie createdMovie = new Movie (id, movie.getName(), movie.getRating(), movie.getFileLink(), movie.getLastView().toLocalDate());
+            Movie createdMovie = new Movie (id, movie.getName(), movie.getRating(), movie.getFileLink(), movie.getLastView().toLocalDate(), movie.getPersonalRating());
 
             return createdMovie;
         }

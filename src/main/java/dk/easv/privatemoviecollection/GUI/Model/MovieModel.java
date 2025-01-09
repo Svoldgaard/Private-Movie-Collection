@@ -1,5 +1,6 @@
     package dk.easv.privatemoviecollection.GUI.Model;
 
+    import dk.easv.privatemoviecollection.BE.Category;
     import dk.easv.privatemoviecollection.BE.Movie;
     import dk.easv.privatemoviecollection.BLL.MovieManager;
     import javafx.collections.FXCollections;
@@ -10,7 +11,7 @@
 
     public class MovieModel {
         private MovieManager movieManager;
-        private List<Movie> allMovies;
+
 
         private ObservableList<Movie> tblMovie;
 
@@ -20,6 +21,18 @@
             tblMovie.addAll(movieManager.getAllMovies());
         }
 
+        public ObservableList<Movie> getMoviesByCategory(Category category) throws Exception {
+            ObservableList<Movie> filteredMovies = FXCollections.observableArrayList();
+
+            for (Movie movie : tblMovie) {
+                // Ensure movie has a category and it matches the selected category
+                if (movie.getCategory() != null && movie.getCategory().getName().equals(category.getName())) {
+                    filteredMovies.add(movie);
+                }
+            }
+
+            return filteredMovies;
+        }
 
         public void searchMovie(String query) throws Exception {
             List<Movie> searchResults = movieManager.searchMovies(query);
