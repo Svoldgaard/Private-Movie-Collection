@@ -41,6 +41,8 @@ public class CategoryModel {
 
     public void updateCategory(Category category) throws Exception {
         categoryManager.updateCategory(category);
+        lstCategory.add(category);
+
 
     }
 

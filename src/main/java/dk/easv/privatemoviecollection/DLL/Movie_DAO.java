@@ -21,7 +21,7 @@ public class Movie_DAO implements IMovieDataAccess {
              Statement stmt = conn.createStatement()) {
 
             String sql = """
-            SELECT m.ID, m.Name, m.Rating, c.Name
+            SELECT m.ID, m.Name, m.Rating, c.CName
             FROM Movie m, Category c, CatMovie cm
             WHERE m.ID = cm.MovieID
             AND cm.CategoryID = c.ID
@@ -33,7 +33,7 @@ public class Movie_DAO implements IMovieDataAccess {
                 int id = rs.getInt("ID");
                 String name = rs.getString("Name");
                 float rating = rs.getFloat("Rating");
-                String categoryName = rs.getString("Name");
+                String categoryName = rs.getString("CName");
 
                 // Retrieve the category object using the category name
                 Category category = new Category(); // Initialize an empty category
@@ -112,7 +112,7 @@ public class Movie_DAO implements IMovieDataAccess {
     @Override
     public void deleteMovie(Movie movie) throws Exception
     {
-        String sql = "DELETE FROM dbo.Movie WHERE ID = ?";
+        String sql = "DELETE FROM dbo.CatMovie WHERE  = ?";
         DB_Connect dbConnect = new DB_Connect();
 
         try(Connection conn = dbConnect.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql))

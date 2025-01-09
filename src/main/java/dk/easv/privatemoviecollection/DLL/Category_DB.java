@@ -25,7 +25,7 @@ public class Category_DB implements ICategoryDataAccess {
             while(rs.next())
             {
                 int id = rs.getInt("ID");
-                String name = rs.getString("Name");
+                String name = rs.getString("CName");
 
                 Category category = new Category(id, name);
                 allCategories.add(category);
@@ -41,22 +41,22 @@ public class Category_DB implements ICategoryDataAccess {
 
     @Override
     public Category createCategory(Category category) throws Exception {
-        String getMaxIdSQL = "SELECT MAX(ID) FROM dbo.Category";
-        String insertCategorySQL = "INSERT INTO dbo.Category(ID, Name) VALUES (?, ?)";
         DB_Connect dbConnect = new DB_Connect();
+        String getMaxIdSQL = "SELECT MAX(ID) FROM dbo.Category";
+        String insertCategorySQL = "INSERT INTO dbo.Category(CName) VALUES (?, ?)";
+
 
         try (Connection conn = dbConnect.getConnection()) {
             PreparedStatement getMaxIdStmt = conn.prepareStatement(getMaxIdSQL);
             ResultSet rs = getMaxIdStmt.executeQuery();
-            int newId = 1;
+            int newCName = 1;
             if (rs.next()) {
-                newId = rs.getInt(1) + 1;
+                newCName = rs.getInt(1);
             }
 
-            PreparedStatement insertStmt = conn.prepareStatement(insertCategorySQL);
-            insertStmt.setInt(1, newId);
-            insertStmt.setString(2, category.getName());
-            insertStmt.executeUpdate();
+            PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+
+            stmt.setString(2, movie.getName());
 
             Category createdCategory = new Category(newId, category.getName());
             return createdCategory;

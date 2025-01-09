@@ -15,9 +15,11 @@ public class CategoryController {
     private TextField txtCategory;
 
     private CategoryModel categoryModel;
+    private MovieController movieController;
 
     public CategoryController() throws Exception {
         categoryModel = new CategoryModel();
+        movieController = new MovieController();
     }
 
     @FXML
@@ -29,9 +31,10 @@ public class CategoryController {
         if (categoryName != null && !categoryName.isEmpty()) {
             Category newCategory = new Category(-1, categoryName);
             try {
+                movieController = new MovieController();
 
                 categoryModel.addCategories(newCategory);
-
+                movieController.refreshCategory();
 
                 ((Stage) (((Button) actionEvent.getSource()).getScene().getWindow())).close();
             } catch (Exception e) {

@@ -25,11 +25,10 @@
       <ListView fx:id="lstCategory" layoutX="23.0" layoutY="100.0" prefHeight="200.0" prefWidth="150.0" />
       <TableView fx:id="tblMovie" layoutX="191.0" layoutY="100.0" prefHeight="200.0" prefWidth="412.0">
         <columns>
-          <TableColumn prefWidth="30.4000244140625" text="ID" />
-          <TableColumn prefWidth="119.99998474121094" text="Name" />
-            <TableColumn prefWidth="87.20001220703125" text="IMDB Rating" />
-            <TableColumn prefWidth="63.199951171875" text="Category" />
-            <TableColumn prefWidth="108.0" text="Personal Rating" />
+          <TableColumn fx:id="colName" prefWidth="170.4000244140625" text="Name" />
+            <TableColumn fx:id="colRating" prefWidth="77.5999755859375" text="IMDB Rating" />
+            <TableColumn fx:id="colCategory" prefWidth="62.39996337890625" text="Category" />
+            <TableColumn fx:id="colPRating" prefWidth="102.40011596679688" text="Personal Rating" />
         </columns>
       </TableView>
    </children>

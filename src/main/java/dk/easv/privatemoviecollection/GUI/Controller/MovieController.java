@@ -17,6 +17,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.text.BreakIterator;
@@ -40,6 +41,16 @@ public class MovieController {
 
     private MovieModel movieModel;
     private CategoryModel categoryModel;
+    @FXML
+    private TableColumn<Movie, Integer> colID;
+    @FXML
+    private TableColumn<Movie, String> colName;
+    @FXML
+    private TableColumn<Movie, Float> colRating;
+    @FXML
+    private TableColumn<Movie, String> colCategory;
+    @FXML
+    private TableColumn<Movie, Float> colPRating;
 
     public MovieController() {
         try {
@@ -71,10 +82,26 @@ public class MovieController {
             }
         });
 
+        colName.setCellValueFactory(new PropertyValueFactory<>("Name"));
+        colRating.setCellValueFactory(new PropertyValueFactory<>("IMDB Rating"));
+        colCategory.setCellValueFactory(new PropertyValueFactory<>("Category"));
+        colPRating.setCellValueFactory(new PropertyValueFactory<>("Personal Rating"));
+
         tblMovie.setItems(movieModel.getObservableMovies());
         lstCategory.setItems(categoryModel.getObservableCategory());
 
+
     }
+
+    public void refreshMovie() {
+        tblMovie.setItems(movieModel.getObservableMovies());
+    }
+
+    public void refreshCategory(){
+
+        lstCategory.setItems(categoryModel.getObservableCategory());
+    }
+
 
     @FXML
     private void btnAddMovie(ActionEvent actionEvent) throws IOException {
@@ -96,21 +123,12 @@ public class MovieController {
     }
 
     @FXML
-    private void btnDeleteMovie(ActionEvent actionEvent) {
+    private void btnDeleteMovie(ActionEvent actionEvent) throws Exception {
+        Movie selectedMovie = tblMovie.getSelectionModel().getSelectedItem();
 
-        /*if (selectedItem != null && selectedItem.getValue() instanceof Movie) {
-            Movie selectedMovie = (Movie) selectedItem.getValue();
-            try {
-                movieModel.deleteMovie(selectedMovie);
-                selectedItem.getParent().getChildren().remove(selectedItem);
-                showAlert("Success", "Movie removed: " + selectedMovie.getName());
-            } catch (Exception e) {
-                displayError(e);
-                e.printStackTrace();
-            }
-        } else {
-            showAlert("Error", "Please select a movie to delete.");
-        }*/
+        if(selectedMovie != null){
+            movieModel.deleteMovie(selectedMovie);
+        }
     }
 
     @FXML
@@ -153,7 +171,11 @@ public class MovieController {
     }
 
 
-    public void btnDeleteCategory(ActionEvent actionEvent) {
+    public void btnDeleteCategory(ActionEvent actionEvent) throws Exception {
+        Category selectedCategory = lstCategory.getSelectionModel().getSelectedItem();
+        if(selectedCategory != null){
+            categoryModel.deleteCategory(selectedCategory);
+        }
     }
 
     public void btnAddRating(ActionEvent actionEvent) {

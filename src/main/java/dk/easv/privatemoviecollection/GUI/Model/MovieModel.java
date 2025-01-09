@@ -28,14 +28,14 @@
 
         public Movie addMovie(Movie movie) throws Exception {
             Movie createdMovie = movieManager.createMovie(movie);
-            allMovies.add(createdMovie);
+            tblMovie.add(createdMovie);
             return createdMovie;
         }
 
 
         public void deleteMovie(Movie movie) throws Exception {
             movieManager.deleteMovie(movie);
-            allMovies.remove(movie);
+            tblMovie.remove(movie);
         }
 
 
