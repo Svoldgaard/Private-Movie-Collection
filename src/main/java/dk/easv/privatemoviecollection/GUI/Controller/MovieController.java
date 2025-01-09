@@ -241,7 +241,7 @@ public class MovieController {
                 controller.initializeForEdit(selectedTreeView);
             }
 
-            TreeItem<String> selectMovieManager = null;
+            TreeItem<Object> selectMovieManager = null;
             if (ActionEvent == null) {
                 stage.setTitle("Edit Playlist");
                 selectMovieManager = treeView.getSelectionModel().getSelectedItem();

@@ -19,7 +19,7 @@ public class Category_DB implements ICategoryDataAccess {
 
         try(Connection conn = dbConnect.getConnection(); Statement stmt = conn.createStatement())
         {
-            String sql = "SELECT * FROM Category";
+            String sql = "SELECT * FROM category";
             ResultSet rs = stmt.executeQuery(sql);
 
             while(rs.next())
