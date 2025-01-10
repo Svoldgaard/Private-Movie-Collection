@@ -206,7 +206,23 @@ public class MovieController {
         }
     }
 
-    public void btnAddRating(ActionEvent actionEvent) {
-        
+    public void btnAddRating(ActionEvent actionEvent) throws IOException {
+        System.out.println("test1");
+        Movie selectedMovie = tblMovie.getSelectionModel().getSelectedItem();
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/dk/easv/privatemoviecollection/FXML/AddRating.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        Stage stage = new Stage();
+        stage.setScene(scene);
+
+        System.out.println("test2");
+        RatingController controller = fxmlLoader.getController();
+        controller.setMovieController(this);
+        controller.setMovie(selectedMovie);
+
+        stage.showAndWait();
+
+        refreshMovie();
+
     }
+
 }

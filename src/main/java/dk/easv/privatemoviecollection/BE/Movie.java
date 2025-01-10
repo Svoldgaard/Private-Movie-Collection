@@ -108,7 +108,7 @@ public class Movie {
     }
 
     public Date getLastView() {
-        return Date.valueOf(lastView);
+        return (lastView != null) ? Date.valueOf(lastView) : null;
     }
 
     public void setLastView(LocalDate lastView) {

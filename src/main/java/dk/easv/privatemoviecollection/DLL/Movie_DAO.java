@@ -114,17 +114,18 @@ public class Movie_DAO implements IMovieDataAccess {
     @Override
     public void updateMovie (Movie movie) throws Exception
     {
-        String sql = "UPDATE dbo.Movie SET Name = ?, Rating = ?, FileLink = ?, LastView = ? WHERE ID = ?";
+        String sql = "UPDATE dbo.Movie SET Name = ?, Rating = ?, FileLink = ?, LastView = ?, PersonalRating = ? WHERE ID = ?";
         DB_Connect dbConnect = new DB_Connect();
 
         try(Connection conn = dbConnect.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql))
         {
-            stmt.setInt(1,movie.getId());
-            stmt.setString(2, movie.getName());
-            stmt.setFloat(3, movie.getRating());
-            stmt.setString(4, movie.getFileLink());
-            stmt.setDate(5, movie.getLastView());
+            stmt.setString(1, movie.getName());
+            stmt.setFloat(2, movie.getRating());
+            stmt.setString(3, movie.getFileLink());
+            stmt.setDate(4, movie.getLastView());
+            stmt.setFloat(5, movie.getPersonalRating());
+            stmt.setInt(6,movie.getId());
 
             stmt.executeUpdate();
         }
@@ -138,7 +139,7 @@ public class Movie_DAO implements IMovieDataAccess {
     @Override
     public void deleteMovie(Movie movie) throws Exception
     {
-        String sql = "DELETE FROM dbo.CatMovie WHERE  = ?";
+        String sql = "DELETE FROM dbo.CatMovie WHERE = ?";
         DB_Connect dbConnect = new DB_Connect();
 
         try(Connection conn = dbConnect.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql))
