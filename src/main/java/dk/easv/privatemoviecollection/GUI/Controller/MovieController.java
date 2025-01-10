@@ -252,8 +252,18 @@ public class MovieController {
         Movie selectedMovie = tblMovie.getSelectionModel().getSelectedItem();
 
         if (selectedMovie != null) {
-            movieModel.deleteMovie(selectedMovie);
-            refreshMovie();
+
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirm Deletion");
+            alert.setHeaderText("Are you sure you want to delete this movie?");
+            alert.setContentText("Movie: " + selectedMovie.getName() + "\nThis action cannot be undone.");
+
+            ButtonType result = alert.showAndWait().orElse(ButtonType.CANCEL);
+            
+            if (result == ButtonType.OK) {
+                movieModel.deleteMovie(selectedMovie);
+                refreshMovie();
+            }
         } else {
             showAlert("No Selection", "Please select a movie to delete.");
         }
