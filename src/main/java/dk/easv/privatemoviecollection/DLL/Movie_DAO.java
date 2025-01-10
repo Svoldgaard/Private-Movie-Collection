@@ -61,16 +61,14 @@ public class Movie_DAO implements IMovieDataAccess {
         try (Connection conn = dbConnect.getConnection()) {
             conn.setAutoCommit(false);
 
-
             String movieSql = "INSERT INTO Movie (Name, Rating, FileLink, LastView) VALUES (?, ?, ?, ?)";
             try (PreparedStatement movieStmt = conn.prepareStatement(movieSql, Statement.RETURN_GENERATED_KEYS)) {
                 movieStmt.setString(1, movie.getName());
                 movieStmt.setFloat(2, movie.getRating());
-                movieStmt.setString(3, movie.getFileLink());
-                movieStmt.setTimestamp(4, new java.sql.Timestamp(System.currentTimeMillis())); // Set current timestamp for LastView
+                movieStmt.setString(3, movie.getFileLink());  // Save the file link
+                movieStmt.setTimestamp(4, new java.sql.Timestamp(System.currentTimeMillis()));  // Set current timestamp for LastView
 
                 movieStmt.executeUpdate();
-
 
                 ResultSet rs = movieStmt.getGeneratedKeys();
                 if (!rs.next()) {
@@ -80,7 +78,7 @@ public class Movie_DAO implements IMovieDataAccess {
                 movie.setId(movieId);
             }
 
-
+            // Save the movie's category relation in the CatMovie table
             String categorySql = "SELECT ID FROM Category WHERE CName = ?";
             int categoryId;
             try (PreparedStatement categoryStmt = conn.prepareStatement(categorySql)) {
@@ -91,7 +89,6 @@ public class Movie_DAO implements IMovieDataAccess {
                 }
                 categoryId = rs.getInt("ID");
             }
-
 
             String catMovieSql = "INSERT INTO CatMovie (MovieID, CategoryID) VALUES (?, ?)";
             try (PreparedStatement catMovieStmt = conn.prepareStatement(catMovieSql)) {
@@ -111,48 +108,78 @@ public class Movie_DAO implements IMovieDataAccess {
 
 
 
+
     @Override
-    public void updateMovie (Movie movie) throws Exception
-    {
+    public void updateMovie(Movie movie) throws Exception {
         String sql = "UPDATE dbo.Movie SET Name = ?, Rating = ?, FileLink = ?, LastView = ? WHERE ID = ?";
         DB_Connect dbConnect = new DB_Connect();
 
-        try(Connection conn = dbConnect.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql))
-        {
-            stmt.setInt(1,movie.getId());
-            stmt.setString(2, movie.getName());
-            stmt.setFloat(3, movie.getRating());
-            stmt.setString(4, movie.getFileLink());
-            stmt.setDate(5, movie.getLastView());
+        try (Connection conn = dbConnect.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, movie.getName());
+            stmt.setFloat(2, movie.getRating());
+            stmt.setString(3, movie.getFileLink());  // Update the file link
+            stmt.setTimestamp(4, new java.sql.Timestamp(System.currentTimeMillis()));  // Set the last view time
+            stmt.setInt(5, movie.getId());
 
             stmt.executeUpdate();
-        }
-        catch(SQLException ex)
-        {
+
+        } catch (SQLException ex) {
             ex.printStackTrace();
             throw new Exception("Could not update Movie", ex);
         }
     }
 
+
     @Override
-    public void deleteMovie(Movie movie) throws Exception
-    {
-        String sql = "DELETE FROM dbo.CatMovie WHERE  = ?";
+    public void deleteMovie(Movie movie) throws Exception {
         DB_Connect dbConnect = new DB_Connect();
 
-        try(Connection conn = dbConnect.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql))
-        {
-            stmt.setInt(1, movie.getId());
+        // SQL to check how many categories the movie is linked to
+        String checkCategorySql = "SELECT COUNT(*) FROM CatMovie WHERE MovieID = ?";
 
-            stmt.executeUpdate();
-        }
-        catch(SQLException ex)
-        {
+        try (Connection conn = dbConnect.getConnection();
+             PreparedStatement checkStmt = conn.prepareStatement(checkCategorySql)) {
+
+            checkStmt.setInt(1, movie.getId());
+            ResultSet rs = checkStmt.executeQuery();
+
+            if (rs.next()) {
+                int count = rs.getInt(1);
+
+                // If the movie is linked to more than one category, just remove the category association
+                if (count > 1) {
+                    String sql = "DELETE FROM CatMovie WHERE MovieID = ? AND CategoryID = ?";
+                    try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                        stmt.setInt(1, movie.getId());
+                        stmt.setInt(2, movie.getCategory().getID());  // Remove specific category association
+                        stmt.executeUpdate();
+                    }
+                }
+                // If the movie is linked to only one category, delete the relationship and the movie
+                else {
+                    // Delete the relationship in CatMovie first
+                    String deleteCatMovieSql = "DELETE FROM CatMovie WHERE MovieID = ?";
+                    try (PreparedStatement stmt = conn.prepareStatement(deleteCatMovieSql)) {
+                        stmt.setInt(1, movie.getId());
+                        stmt.executeUpdate();
+                    }
+
+                    // Now, delete the movie entirely
+                    String deleteMovieSql = "DELETE FROM Movie WHERE ID = ?";
+                    try (PreparedStatement stmt = conn.prepareStatement(deleteMovieSql)) {
+                        stmt.setInt(1, movie.getId());
+                        stmt.executeUpdate();
+                    }
+                }
+            }
+        } catch (SQLException ex) {
             throw new Exception("Could not delete Movie", ex);
         }
-
     }
+
+
 
 
 }

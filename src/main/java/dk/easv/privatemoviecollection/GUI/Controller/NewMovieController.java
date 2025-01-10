@@ -1,9 +1,9 @@
 package dk.easv.privatemoviecollection.GUI.Controller;
 
-//Project import
+// Project imports
 import dk.easv.privatemoviecollection.BE.Movie;
-import dk.easv.privatemoviecollection.BE.Category;  // Add this import for Category
-import dk.easv.privatemoviecollection.GUI.Model.CategoryModel;  // Add import for CategoryModel
+import dk.easv.privatemoviecollection.BE.Category;
+import dk.easv.privatemoviecollection.GUI.Model.CategoryModel;
 import dk.easv.privatemoviecollection.GUI.Model.MovieModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,8 +16,9 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.net.ContentHandlerFactory;
-
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 
 public class NewMovieController {
@@ -38,7 +39,6 @@ public class NewMovieController {
     private MovieController movieController;
 
     public void initialize() {
-
         categoryList = FXCollections.observableArrayList();
 
         try {
@@ -67,8 +67,9 @@ public class NewMovieController {
             String movieTitle = txtMovieTitle.getText().trim();
             float rating = Float.parseFloat(txtRating.getText().trim());
             ObservableList<String> selectedCategories = lstCategory.getSelectionModel().getSelectedItems();
+            String fileLink = txtFileLink.getText().trim();  // Get the file link
 
-            if (movieTitle.isEmpty() || selectedCategories.isEmpty() || rating < 0) {
+            if (movieTitle.isEmpty() || selectedCategories.isEmpty() || rating < 0 || fileLink.isEmpty()) {
                 showAlert("Error", "Please fill in all fields correctly and select at least one category.");
                 return;
             }
@@ -77,8 +78,9 @@ public class NewMovieController {
             Category category = new Category();
             category.setName(selectedCategories.get(0));
 
-            // Create the Movie object
-            Movie newMovie = new Movie(0, movieTitle, rating, 0.0f, category); // Adjust personalRating as needed
+            // Create the Movie object with the file link
+            Movie newMovie = new Movie(0, movieTitle, rating, 0.0f, category);
+            newMovie.setFileLink(fileLink);  // Set the file link for the movie
 
             // Save the movie
             MovieModel movieModel = new MovieModel();
@@ -89,6 +91,7 @@ public class NewMovieController {
                 movieController.refreshMovie();
             }
 
+            // Close the add movie window
             ((Stage) (((Button) actionEvent.getSource()).getScene().getWindow())).close();
             showAlert("Success", "Movie added successfully!");
 
@@ -99,7 +102,6 @@ public class NewMovieController {
             showAlert("Error", "Failed to add movie.");
         }
     }
-
 
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -114,19 +116,30 @@ public class NewMovieController {
         ((Stage) (((Button) actionEvent.getSource()).getScene().getWindow())).close();
     }
 
-    public void btnFile(ActionEvent actionEvent) {
+    @FXML
+    private void btnFile(ActionEvent actionEvent) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Video file");
         fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Video Files", "*.mp4", "*.mpeg4"));
         File file = fileChooser.showOpenDialog(new Stage());
 
         if (file != null) {
-            txtFileLink.setText(file.getAbsolutePath());
+            // Get the file path and move it to the dedicated resources folder
+            String userMoviesDirectory = "src/main/resources/dk/easv/privatemoviecollection/Movie";  // Folder inside resources
+            File movieDir = new File(userMoviesDirectory);
+            if (!movieDir.exists()) {
+                movieDir.mkdirs();  // Create directory if it doesn't exist
+            }
+
+            // Copy the file to the Movies directory
+            File destinationFile = new File(movieDir, file.getName());
+            try {
+                Files.copy(file.toPath(), destinationFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                txtFileLink.setText("dk/easv/privatemoviecollection/Movie/" + file.getName()); // Relative path to resources
+            } catch (IOException e) {
+                e.printStackTrace();
+                showAlert("Error", "Failed to copy the file.");
+            }
         }
     }
-
-
-    public void MovieMain(MovieController movieController) {
-    }
-
 }
