@@ -23,6 +23,14 @@ public class Movie {
 
     }
 
+    public Movie(int id, String name, float rating, float personalRating) {
+        this.id = id;
+        this.name = name;
+        this.rating = rating;
+        this.personalRating = personalRating;
+
+    }
+
     public float getPersonalRating() {
         return personalRating;
     }
@@ -44,6 +52,7 @@ public class Movie {
         this.id = id;
         this.name = movieTitle;
         this.rating = rating;
+
     }
 
     public Movie(int i, String movieTitle, Float rating, String selectedCategory) {

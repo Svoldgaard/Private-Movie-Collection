@@ -10,14 +10,19 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.net.ContentHandlerFactory;
 
 import java.util.List;
 
 public class NewMovieController {
 
+    public TextField txtFileLink;
     @FXML
     private TextField txtRating;
     @FXML
@@ -93,15 +98,27 @@ public class NewMovieController {
     }
 
     public void btnFile(ActionEvent actionEvent) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open Music file");
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Music Files", "*.mp3", "*.wav"));
+        File file = fileChooser.showOpenDialog(new Stage());
+
+        if (file != null) {
+            txtFileLink.setText(file.getAbsolutePath());
+
+            // Calculate and display duration using MediaPlayer
+            Media media = new Media(file.toURI().toString());
+            MediaPlayer mediaPlayer = new MediaPlayer(media);
+
+
+        }
     }
 
-    void setNewMovieController(TreeItem<String> selectedItem) {
+
+    public void MovieMain(MovieController movieController) {
     }
 
-    void MovieMain(MovieController movieController) {
-    }
-
-    void setMovieController(MovieController movieController) {
+    public void setMovieController(MovieController movieController) {
     }
 
     void initializeForEdit(Object selectedTreeView) {
