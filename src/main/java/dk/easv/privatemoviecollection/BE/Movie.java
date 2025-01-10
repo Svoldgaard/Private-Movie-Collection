@@ -12,6 +12,7 @@ public class Movie {
     private LocalDate lastView;
     private float personalRating;
     private Category category;
+    private String filePath;
 
     public Movie(int id, String name, float rating, String fileLink, LocalDate lastView,float personalRating) {
         this.id = id;
@@ -123,6 +124,9 @@ public class Movie {
         return category;
     }
 
+    public String getFilePath() {return filePath;}
+    public void setFilePath(String filePath) {this.filePath = filePath;}
+
     @Override
     public String toString() {
         return "Movie{" +
@@ -132,4 +136,6 @@ public class Movie {
                 ", category=" + (category != null ? category.getName() : "No Category") +
                 '}';
     }
+
+
 }
