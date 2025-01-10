@@ -20,20 +20,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
-import java.io.File;
 import java.io.IOException;
 
 public class MovieController {
 
-    @FXML
-    private javafx.scene.media.MediaView MediaView;
-
-    @FXML
-    private MediaView mediaView;
     @FXML
     private TextField txtSearch;
 
@@ -48,7 +40,6 @@ public class MovieController {
 
     private MovieModel movieModel;
     private CategoryModel categoryModel;
-    private javafx.scene.media.MediaPlayer mediaPlayer;
 
     @FXML
     private TableColumn<Movie, String> colName;
@@ -327,9 +318,23 @@ public class MovieController {
         }
     }
 
+    public void btnAddRating(ActionEvent actionEvent) throws IOException {
+        System.out.println("test1");
+        Movie selectedMovie = tblMovie.getSelectionModel().getSelectedItem();
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/dk/easv/privatemoviecollection/FXML/AddRating.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        Stage stage = new Stage();
+        stage.setScene(scene);
 
+        System.out.println("test2");
+        RatingController controller = fxmlLoader.getController();
+        controller.setMovieController(this);
+        controller.setMovie(selectedMovie);
 
-    public void btnAddRating(ActionEvent actionEvent) {
+        stage.showAndWait();
+
+        refreshMovie();
 
     }
+
 }

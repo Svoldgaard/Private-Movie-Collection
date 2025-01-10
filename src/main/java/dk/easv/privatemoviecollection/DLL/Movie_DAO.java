@@ -110,8 +110,9 @@ public class Movie_DAO implements IMovieDataAccess {
 
 
     @Override
-    public void updateMovie(Movie movie) throws Exception {
-        String sql = "UPDATE dbo.Movie SET Name = ?, Rating = ?, FileLink = ?, LastView = ? WHERE ID = ?";
+    public void updateMovie (Movie movie) throws Exception
+    {
+        String sql = "UPDATE dbo.Movie SET Name = ?, Rating = ?, FileLink = ?, LastView = ?, PersonalRating = ? WHERE ID = ?";
         DB_Connect dbConnect = new DB_Connect();
 
         try (Connection conn = dbConnect.getConnection();
@@ -121,7 +122,8 @@ public class Movie_DAO implements IMovieDataAccess {
             stmt.setFloat(2, movie.getRating());
             stmt.setString(3, movie.getFileLink());  // Update the file link
             stmt.setTimestamp(4, new java.sql.Timestamp(System.currentTimeMillis()));  // Set the last view time
-            stmt.setInt(5, movie.getId());
+            stmt.setFloat(5, movie.getPersonalRating());
+            stmt.setInt(6, movie.getId());
 
             stmt.executeUpdate();
 
@@ -177,9 +179,8 @@ public class Movie_DAO implements IMovieDataAccess {
         } catch (SQLException ex) {
             throw new Exception("Could not delete Movie", ex);
         }
+
     }
-
-
 
 
 }
