@@ -20,11 +20,17 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.IOException;
 
 public class MovieController {
+
+
+    @FXML
+    private MediaView mediaView;
 
     @FXML
     private TextField txtSearch;
@@ -52,6 +58,8 @@ public class MovieController {
 
     @FXML
     private TableColumn<Movie, Float> colPRating;
+
+    private javafx.scene.media.MediaPlayer mediaPlayer;
 
     public MovieController() {
         try {
