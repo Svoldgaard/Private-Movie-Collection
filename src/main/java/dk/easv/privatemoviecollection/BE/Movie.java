@@ -31,6 +31,23 @@ public class Movie {
 
     }
 
+    public Movie(int id, String name, float rating, String fileLink, Category category, float personalRating) {
+        this.id = id;
+        this.name = name;
+        this.rating = rating;
+        this.fileLink = fileLink;
+        this.category = category;
+        this.personalRating = personalRating;
+    }
+
+    public Movie(int i, String movieTitle, float rating, float v, Category category) {
+        this.id = i;
+        this.name = movieTitle;
+        this.rating = rating;
+        this.category = category;
+        this.personalRating = v;
+    }
+
     public float getPersonalRating() {
         return personalRating;
     }

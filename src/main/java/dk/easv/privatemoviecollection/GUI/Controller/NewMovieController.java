@@ -35,8 +35,9 @@ public class NewMovieController {
     private Object treeView;
 
     private CategoryModel categoryModel;
+    private MovieController movieController;
 
-    public void initialize(Object selectedTreeView) {
+    public void initialize() {
 
         categoryList = FXCollections.observableArrayList();
 
@@ -56,22 +57,37 @@ public class NewMovieController {
         }
     }
 
+    public void setMovieController(MovieController movieController) {
+        this.movieController = movieController;
+    }
+
     @FXML
     private void btnSave(ActionEvent actionEvent) {
         try {
             String movieTitle = txtMovieTitle.getText().trim();
-            Float rating = Float.parseFloat(txtRating.getText().trim());
-            String selectedCategory = lstCategory.getSelectionModel().getSelectedItem();  // Get selected category
+            float rating = Float.parseFloat(txtRating.getText().trim());
+            ObservableList<String> selectedCategories = lstCategory.getSelectionModel().getSelectedItems();
 
-            if (movieTitle.isEmpty() || rating < 0 || selectedCategory == null) {
-                showAlert("Error", "Please fill in all fields correctly.");
+            if (movieTitle.isEmpty() || selectedCategories.isEmpty() || rating < 0) {
+                showAlert("Error", "Please fill in all fields correctly and select at least one category.");
                 return;
             }
 
-            Movie newMovie = new Movie(0, movieTitle, rating, selectedCategory);
+            // Create the first category (adjust for multiple categories if needed)
+            Category category = new Category();
+            category.setName(selectedCategories.get(0));
 
+            // Create the Movie object
+            Movie newMovie = new Movie(0, movieTitle, rating, 0.0f, category); // Adjust personalRating as needed
+
+            // Save the movie
             MovieModel movieModel = new MovieModel();
             Movie savedMovie = movieModel.addMovie(newMovie);
+
+            // Refresh the movie list in the MovieController
+            if (movieController != null) {
+                movieController.refreshMovie();
+            }
 
             ((Stage) (((Button) actionEvent.getSource()).getScene().getWindow())).close();
             showAlert("Success", "Movie added successfully!");
@@ -83,6 +99,7 @@ public class NewMovieController {
             showAlert("Error", "Failed to add movie.");
         }
     }
+
 
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -99,33 +116,17 @@ public class NewMovieController {
 
     public void btnFile(ActionEvent actionEvent) {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Open Music file");
-        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Music Files", "*.mp3", "*.wav"));
+        fileChooser.setTitle("Open Video file");
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Video Files", "*.mp4", "*.mpeg4"));
         File file = fileChooser.showOpenDialog(new Stage());
 
         if (file != null) {
             txtFileLink.setText(file.getAbsolutePath());
-
-            // Calculate and display duration using MediaPlayer
-            Media media = new Media(file.toURI().toString());
-            MediaPlayer mediaPlayer = new MediaPlayer(media);
-
-
         }
     }
 
 
     public void MovieMain(MovieController movieController) {
     }
-
-    public void setMovieController(MovieController movieController) {
-    }
-
-    void initializeForEdit(Object selectedTreeView) {
-        String currentMovieTitle = txtMovieTitle.getText().trim();
-        movie = (Movie) selectedTreeView;
-
-    }
-
 
 }

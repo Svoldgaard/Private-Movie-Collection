@@ -36,13 +36,13 @@ public class Movie_DAO implements IMovieDataAccess {
                 String categoryName = rs.getString("CName");
                 float personalRating = rs.getFloat("PersonalRating");
 
-                // Retrieve the category object using the category name
-                Category category = new Category(); // Initialize an empty category
-                category.setName(categoryName);  // Set the category name from the DB query
 
-                // Create the movie object and set the category
+                Category category = new Category();
+                category.setName(categoryName);
+
+
                 Movie movie = new Movie(id, name, rating,personalRating);
-                movie.setCategory(category);  // Associate the movie with the category
+                movie.setCategory(category);
 
                 allMovies.add(movie);
             }
@@ -55,36 +55,61 @@ public class Movie_DAO implements IMovieDataAccess {
     }
 
     @Override
-    public Movie createMovie(Movie movie) throws Exception
-    {
-        String sql ="INSERT INTO dbo.Movie (ID, Name, Rating, FileLink, LastView) VALUES (?,?,?,?,?)";
+    public Movie createMovie(Movie movie) throws Exception {
         DB_Connect dbConnect = new DB_Connect();
 
-        try(Connection conn =dbConnect.getConnection())
-        {
-            PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-
-            stmt.setString(2, movie.getName());
-            stmt.setFloat(3, movie.getRating());
-            stmt.setString(4, movie.getFileLink());
-            stmt.setDate(5, movie.getLastView());
+        try (Connection conn = dbConnect.getConnection()) {
+            conn.setAutoCommit(false);
 
 
-            stmt.executeUpdate();
+            String movieSql = "INSERT INTO Movie (Name, Rating, FileLink, LastView) VALUES (?, ?, ?, ?)";
+            try (PreparedStatement movieStmt = conn.prepareStatement(movieSql, Statement.RETURN_GENERATED_KEYS)) {
+                movieStmt.setString(1, movie.getName());
+                movieStmt.setFloat(2, movie.getRating());
+                movieStmt.setString(3, movie.getFileLink());
+                movieStmt.setTimestamp(4, new java.sql.Timestamp(System.currentTimeMillis())); // Set current timestamp for LastView
 
-            ResultSet rs = stmt.getGeneratedKeys();
-            int id = rs.getInt(1);
+                movieStmt.executeUpdate();
 
-            Movie createdMovie = new Movie (id, movie.getName(), movie.getRating(), movie.getFileLink(), movie.getLastView().toLocalDate(), movie.getPersonalRating());
 
-            return createdMovie;
-        }
-        catch(SQLException ex)
-        {
+                ResultSet rs = movieStmt.getGeneratedKeys();
+                if (!rs.next()) {
+                    throw new SQLException("Failed to retrieve Movie ID.");
+                }
+                int movieId = rs.getInt(1);
+                movie.setId(movieId);
+            }
+
+
+            String categorySql = "SELECT ID FROM Category WHERE CName = ?";
+            int categoryId;
+            try (PreparedStatement categoryStmt = conn.prepareStatement(categorySql)) {
+                categoryStmt.setString(1, movie.getCategory().getName());
+                ResultSet rs = categoryStmt.executeQuery();
+                if (!rs.next()) {
+                    throw new SQLException("Category not found: " + movie.getCategory().getName());
+                }
+                categoryId = rs.getInt("ID");
+            }
+
+
+            String catMovieSql = "INSERT INTO CatMovie (MovieID, CategoryID) VALUES (?, ?)";
+            try (PreparedStatement catMovieStmt = conn.prepareStatement(catMovieSql)) {
+                catMovieStmt.setInt(1, movie.getId());
+                catMovieStmt.setInt(2, categoryId);
+                catMovieStmt.executeUpdate();
+            }
+
+            conn.commit();
+            return movie;
+
+        } catch (SQLException ex) {
             ex.printStackTrace();
             throw new Exception("Could not create Movie", ex);
         }
     }
+
+
 
     @Override
     public void updateMovie (Movie movie) throws Exception

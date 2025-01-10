@@ -118,10 +118,9 @@ public class MovieController {
     }
 
     public void refreshCategory() {
-        Platform.runLater(() -> {
-            lstCategory.setItems(null);
-            lstCategory.setItems(categoryModel.getObservableCategory());
-        });
+
+        lstCategory.setItems(categoryModel.getObservableCategory());
+
     }
 
     @FXML
