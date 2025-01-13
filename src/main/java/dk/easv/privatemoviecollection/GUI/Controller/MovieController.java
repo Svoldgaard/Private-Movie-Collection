@@ -25,8 +25,10 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.IOException;
+import java.util.Date;
 
 public class MovieController {
+
 
 
     @FXML
@@ -59,6 +61,9 @@ public class MovieController {
     @FXML
     private TableColumn<Movie, Float> colPRating;
 
+    @FXML
+    public TableColumn<Movie, Date> colLastView;
+
     private javafx.scene.media.MediaPlayer mediaPlayer;
 
     public MovieController() {
@@ -88,6 +93,8 @@ public class MovieController {
             return new SimpleStringProperty(category != null ? category.getName() : "No Category");
         });
         colPRating.setCellValueFactory(new PropertyValueFactory<>("personalRating"));
+        colLastView.setCellValueFactory(new PropertyValueFactory<>("lastViewed"));
+
 
 
         lstCategory.setItems(categoryModel.getObservableCategory());
