@@ -253,14 +253,7 @@ public class MovieController implements Initializable {
         }
     }
 
-
-    @FXML
-    private void btnEditRating(ActionEvent actionEvent) {
-
-    }
-
-
-    void showAlert(String title, String message) {
+    private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
         alert.setHeaderText(null);

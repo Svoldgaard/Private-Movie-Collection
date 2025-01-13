@@ -19,7 +19,6 @@ public class Movie {
         this.name = name;
         this.rating = rating;
         this.fileLink = fileLink;
-        this.lastView = lastView;
         this.personalRating = personalRating;
 
     }
@@ -96,6 +95,7 @@ public class Movie {
         this.name = "";
         this.rating = 0.0f;
         this.fileLink = "";
+        this.lastView = getLastView();
         this.personalRating = 0.0f;
         this.category = null;
     }

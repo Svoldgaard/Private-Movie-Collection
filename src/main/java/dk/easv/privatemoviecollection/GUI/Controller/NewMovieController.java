@@ -39,6 +39,7 @@ public class NewMovieController {
     private CategoryModel categoryModel;
     private MovieController movieController;
 
+
     public void initialize() {
 
         categoryList = FXCollections.observableArrayList();

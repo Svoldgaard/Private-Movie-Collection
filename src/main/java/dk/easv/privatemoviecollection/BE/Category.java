@@ -18,6 +18,10 @@ public class Category {
 
     }
 
+    public static Category getText() {
+        return null;
+    }
+
     public int getID() {
         return ID;
     }
