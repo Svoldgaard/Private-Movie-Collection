@@ -315,17 +315,11 @@ public class MovieController implements Initializable {
         }
 
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/dk/easv/privatemoviecollection/FXML/AddMovie.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/dk/easv/privatemoviecollection/FXML/EditMovie.fxml"));
             Parent root = fxmlLoader.load();
 
-            NewMovieController controller = fxmlLoader.getController();
-            if (controller != null) {
-                controller.setMovie(selectedMovie);
-            }
-            else{
-                showAlert("Error", "Failed to load the movie editor.");
-                return;
-            }
+            EditMovieController controller = fxmlLoader.getController();
+            controller.setMovie(movieModel, selectedMovie);
 
             Stage stage = new Stage();
             stage.setTitle("Edit Movie");
@@ -380,14 +374,12 @@ public class MovieController implements Initializable {
     }
 
     public void btnAddRating(ActionEvent actionEvent) throws IOException {
-        System.out.println("test1");
         Movie selectedMovie = tblMovie.getSelectionModel().getSelectedItem();
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/dk/easv/privatemoviecollection/FXML/AddRating.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         Stage stage = new Stage();
         stage.setScene(scene);
 
-        System.out.println("test2");
         RatingController controller = fxmlLoader.getController();
         controller.setMovieController(this);
         controller.setMovie(selectedMovie);

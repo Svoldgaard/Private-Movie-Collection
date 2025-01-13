@@ -1,6 +1,7 @@
 package dk.easv.privatemoviecollection.BLL;
 
 // Projects imports
+import dk.easv.privatemoviecollection.BE.Category;
 import dk.easv.privatemoviecollection.BE.Movie;
 import dk.easv.privatemoviecollection.BLL.Search.MovieSearcher;
 import dk.easv.privatemoviecollection.DLL.Movie_DAO;
@@ -39,4 +40,5 @@ public class MovieManager {
     public void updateMovie(Movie updatedMovie) throws Exception {
         movieDAO.updateMovie(updatedMovie);
     }
+
 }

@@ -5,6 +5,7 @@ import dk.easv.privatemoviecollection.BLL.CategoryManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.util.Collections;
 import java.util.List;
 
 public class CategoryModel {
@@ -18,9 +19,8 @@ public class CategoryModel {
         refreshCategories();
     }
 
-    public List<Category> getAllCategories() {
-        return lstCategory;
-    }
+    public List<Category> getAllCategories() { return lstCategory; }
+
 
     public Category addCategories(Category category) throws Exception {
         Category createdCategory = categoryManager.createCategory(category);
@@ -38,6 +38,7 @@ public class CategoryModel {
         refreshCategories();
     }
 
+    // Returns an ObservableList of categories
     public ObservableList<Category> getObservableCategory() {
         return lstCategory;
     }

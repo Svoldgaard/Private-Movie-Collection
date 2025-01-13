@@ -3,9 +3,16 @@
     import dk.easv.privatemoviecollection.BE.Category;
     import dk.easv.privatemoviecollection.BE.Movie;
     import dk.easv.privatemoviecollection.BLL.MovieManager;
+    import dk.easv.privatemoviecollection.DLL.DBConnection.DB_Connect;
     import javafx.collections.FXCollections;
     import javafx.collections.ObservableList;
 
+    import java.io.IOException;
+    import java.sql.Connection;
+    import java.sql.PreparedStatement;
+    import java.sql.ResultSet;
+    import java.sql.SQLException;
+    import java.util.ArrayList;
     import java.util.List;
 
 
@@ -62,4 +69,5 @@
         public ObservableList<Movie> getObservableMovies() {
             return tblMovie;
         }
+
     }

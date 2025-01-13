@@ -86,8 +86,22 @@ public class Movie {
         this.category = category;
     }
 
+    public int indexOf(Movie movie) {
+        return movie.id - 1;
+    }
 
+   /* @Override
+    public boolean equals(Object obj){
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Movie movie = (Movie) obj;
+        return id == movie.id;
+    }
 
+    @Override
+    public int hashCode() {
+        return Integer.hashCode(id);
+    }*/
 
 
     public Movie(){
