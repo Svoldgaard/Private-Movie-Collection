@@ -49,6 +49,9 @@ public class Movie {
         this.personalRating = v;
     }
 
+    public Movie(String text, float v, String text1) {
+    }
+
     public float getPersonalRating() {
         return personalRating;
     }
@@ -74,6 +77,16 @@ public class Movie {
     }
 
     public Movie(int i, String movieTitle, Float rating, String selectedCategory) {
+    }
+
+    public Movie(){
+        this.id = 0;
+        this.name = "";
+        this.rating = 0.0f;
+        this.fileLink = "";
+        this.lastView = LocalDate.now();
+        this.personalRating = 0.0f;
+        this.category = null;
     }
 
     public int getId() {

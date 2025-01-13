@@ -1,9 +1,9 @@
 package dk.easv.privatemoviecollection.GUI.Controller;
 
-// Project imports
+//Project import
 import dk.easv.privatemoviecollection.BE.Movie;
-import dk.easv.privatemoviecollection.BE.Category;
-import dk.easv.privatemoviecollection.GUI.Model.CategoryModel;
+import dk.easv.privatemoviecollection.BE.Category;  // Add this import for Category
+import dk.easv.privatemoviecollection.GUI.Model.CategoryModel;  // Add import for CategoryModel
 import dk.easv.privatemoviecollection.GUI.Model.MovieModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.EventObject;
 import java.util.List;
 
 public class NewMovieController {
@@ -33,12 +34,12 @@ public class NewMovieController {
 
     private Movie movie;
     private ObservableList<String> categoryList;
-    private Object treeView;
 
     private CategoryModel categoryModel;
     private MovieController movieController;
 
     public void initialize() {
+
         categoryList = FXCollections.observableArrayList();
 
         try {
@@ -63,6 +64,7 @@ public class NewMovieController {
 
     @FXML
     private void btnSave(ActionEvent actionEvent) {
+        // To save when making a new movie
         try {
             String movieTitle = txtMovieTitle.getText().trim();
             float rating = Float.parseFloat(txtRating.getText().trim());
@@ -101,6 +103,14 @@ public class NewMovieController {
             e.printStackTrace();
             showAlert("Error", "Failed to add movie.");
         }
+        // To Save when movie has been edited
+        if(movie != null){
+            movie.setName(txtMovieTitle.getText());
+            movie.setRating(Float.parseFloat(txtRating.getText()));
+            movie.setFileLink(txtFileLink.getText());
+
+        }
+
     }
 
     private void showAlert(String title, String message) {
@@ -142,4 +152,15 @@ public class NewMovieController {
             }
         }
     }
+
+    void setMovie(Movie selectedMovie) {
+        this.movie = selectedMovie;
+        txtMovieTitle.setText(movie.getName());
+        txtRating.setText(String.valueOf(movie.getRating()));
+        txtFileLink.setText(movie.getFileLink());
+
+    }
+
+
+
 }
