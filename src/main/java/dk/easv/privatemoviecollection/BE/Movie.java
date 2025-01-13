@@ -96,7 +96,6 @@ public class Movie {
         this.name = "";
         this.rating = 0.0f;
         this.fileLink = "";
-        this.lastView = LocalDate.now();
         this.personalRating = 0.0f;
         this.category = null;
     }

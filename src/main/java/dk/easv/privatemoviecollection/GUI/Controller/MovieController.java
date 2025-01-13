@@ -56,6 +56,13 @@ public class MovieController implements Initializable {
     private CategoryModel categoryModel;
 
     @FXML
+    public TextField txtFileLink;
+    @FXML
+    private TextField txtRating;
+    @FXML
+    private TextField txtMovieTitle;
+
+    @FXML
     private TableColumn<Movie, String> colName;
 
     @FXML
@@ -77,7 +84,6 @@ public class MovieController implements Initializable {
     private Media media;
     private MediaPlayer mediaPlayer;
 
-    private javafx.scene.media.MediaPlayer mediaPlayer;
 
     public MovieController() {
         try {
@@ -186,11 +192,11 @@ public class MovieController implements Initializable {
             });
 
             // Allow the user to seek within the video using the slider
-            movieDuration.setOnMouseReleased(event -> {
+            /*movieDuration.setOnMouseReleased(event -> {
                 if (mediaPlayer != null) {
-                    mediaPlayer.seek(Duration.seconds(movieDuration.getValue()));
+                    //mediaPlayer.seek(Duration.seconds(movieDuration.getValue()));
                 }
-            });
+            });*/
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -352,7 +358,7 @@ public class MovieController implements Initializable {
 
             selectedMovie.setName(movieTitle);
             selectedMovie.setRating(rating);
-            selectedMovie.setFilePath(txtFileLink.getText());
+            selectedMovie.setFileLink(txtFileLink.getText());
         }
         catch (NumberFormatException e) {
             showAlert("Error", "Please enter a valid number for the rating.");
