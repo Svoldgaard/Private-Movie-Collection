@@ -30,8 +30,10 @@ import javafx.util.Duration;
 import java.io.IOException;
 import java.util.EventObject;
 import java.util.List;
+import java.util.Date;
 
 public class MovieController {
+
 
 
     @FXML
@@ -70,6 +72,10 @@ public class MovieController {
     @FXML
     private TableColumn<Movie, Float> colPRating;
 
+    @FXML
+    public TableColumn<Movie, Date> colLastView;
+
+    private javafx.scene.media.MediaPlayer mediaPlayer;
     private MediaPlayer mediaPlayer;
 
     public MovieController() {
@@ -99,6 +105,8 @@ public class MovieController {
             return new SimpleStringProperty(category != null ? category.getName() : "No Category");
         });
         colPRating.setCellValueFactory(new PropertyValueFactory<>("personalRating"));
+        colLastView.setCellValueFactory(new PropertyValueFactory<>("lastViewed"));
+
 
 
         lstCategory.setItems(categoryModel.getObservableCategory());
@@ -153,7 +161,7 @@ public class MovieController {
             String filePath = "file:" + getClass().getResource("/dk/easv/privatemoviecollection/Movie/" + fileName).toExternalForm();
 
             // Create a Media instance using the resolved file path
-            Media media = new Media(filePath);
+            javafx.scene.media.Media media = new javafx.scene.media.Media(filePath);
 
             // Create a MediaPlayer instance to handle the playback of the video
             mediaPlayer = new MediaPlayer(media);

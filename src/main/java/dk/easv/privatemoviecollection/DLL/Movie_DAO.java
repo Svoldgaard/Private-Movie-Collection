@@ -21,7 +21,7 @@ public class Movie_DAO implements IMovieDataAccess {
              Statement stmt = conn.createStatement()) {
 
             String sql = """
-            SELECT m.ID, m.Name, m.Rating, m.PersonalRating ,c.CName
+            SELECT m.ID, m.Name, m.Rating, m.PersonalRating, m.LastView, m.FileLink ,c.CName
             FROM Movie m, Category c, CatMovie cm
             WHERE m.ID = cm.MovieID
             AND cm.CategoryID = c.ID
@@ -35,13 +35,15 @@ public class Movie_DAO implements IMovieDataAccess {
                 float rating = rs.getFloat("Rating");
                 String categoryName = rs.getString("CName");
                 float personalRating = rs.getFloat("PersonalRating");
+                Date lastView = rs.getDate("LastView");
+                String fileLink = rs.getString("FileLink");
 
 
                 Category category = new Category();
                 category.setName(categoryName);
 
 
-                Movie movie = new Movie(id, name, rating,personalRating);
+                Movie movie = new Movie(id, name, rating,personalRating, lastView,fileLink);
                 movie.setCategory(category);
 
                 allMovies.add(movie);

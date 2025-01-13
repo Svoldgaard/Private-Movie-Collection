@@ -9,12 +9,12 @@ public class Movie {
     private String name;
     private float rating;
     private String fileLink;
-    private LocalDate lastView;
+    private Date lastView;
     private float personalRating;
     private Category category;
     private String filePath;
 
-    public Movie(int id, String name, float rating, String fileLink, LocalDate lastView,float personalRating) {
+    public Movie(int id, String name, float rating, String fileLink, Date lastView,float personalRating) {
         this.id = id;
         this.name = name;
         this.rating = rating;
@@ -48,9 +48,27 @@ public class Movie {
         this.category = category;
         this.personalRating = v;
     }
-
     public Movie(String text, float v, String text1) {
     }
+
+    public Movie(int id, String name, float rating, float personalRating, Date lastView) {
+        this.id = id;
+        this.name = name;
+        this.rating = rating;
+        this.personalRating = personalRating;
+        this.lastView = lastView;
+    }
+
+    public Movie(int id, String name, float rating, float personalRating, Date lastView, String fileLink) {
+        this.id = id;
+        this.name = name;
+        this.rating = rating;
+        this.personalRating = personalRating;
+        this.lastView = lastView;
+        this.fileLink = fileLink;
+
+    }
+
 
     public float getPersonalRating() {
         return personalRating;
@@ -60,7 +78,7 @@ public class Movie {
         this.personalRating = personalRating;
     }
 
-    public Movie(int id, String name, float rating, String fileLink, LocalDate lastView, Category category) {
+    public Movie(int id, String name, float rating, String fileLink, Date lastView, Category category) {
         this.id = id;
         this.name = name;
         this.rating = rating;
@@ -122,10 +140,10 @@ public class Movie {
     }
 
     public Date getLastView() {
-        return (lastView != null) ? Date.valueOf(lastView) : null;
+        return (lastView != null) ? Date.valueOf(String.valueOf(lastView)) : null;
     }
 
-    public void setLastView(LocalDate lastView) {
+    public void setLastView(Date lastView) {
         this.lastView = lastView;
     }
 
