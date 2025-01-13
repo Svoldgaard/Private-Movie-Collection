@@ -76,7 +76,7 @@ public class MovieController {
     public TableColumn<Movie, Date> colLastView;
 
     private javafx.scene.media.MediaPlayer mediaPlayer;
-    private MediaPlayer mediaPlayer;
+
 
     public MovieController() {
         try {
@@ -225,7 +225,7 @@ public class MovieController {
         Movie selectedMovie = tblMovie.getSelectionModel().getSelectedItem();
         if (selectedMovie != null) {
             // Ensure the movie has a valid filePath
-            String filePath = selectedMovie.getFilePath();  // assuming you have filePath set correctly in your Movie object
+            String filePath = selectedMovie.getFileLink();  // assuming you have filePath set correctly in your Movie object
 
             if (filePath != null && !filePath.isEmpty()) {
                 playVideo(filePath);  // Call playVideo with the absolute path
@@ -344,7 +344,7 @@ public class MovieController {
 
             selectedMovie.setName(movieTitle);
             selectedMovie.setRating(rating);
-            selectedMovie.setFilePath(txtFileLink.getText());
+            selectedMovie.setFileLink(txtFileLink.getText());
         }
         catch (NumberFormatException e) {
             showAlert("Error", "Please enter a valid number for the rating.");

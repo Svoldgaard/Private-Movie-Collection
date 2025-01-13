@@ -19,7 +19,6 @@ public class Movie {
         this.name = name;
         this.rating = rating;
         this.fileLink = fileLink;
-        this.lastView = lastView;
         this.personalRating = personalRating;
 
     }
@@ -102,7 +101,7 @@ public class Movie {
         this.name = "";
         this.rating = 0.0f;
         this.fileLink = "";
-        this.lastView = LocalDate.now();
+        this.lastView = getLastView();
         this.personalRating = 0.0f;
         this.category = null;
     }
@@ -154,9 +153,6 @@ public class Movie {
     public Category getCategory() {
         return category;
     }
-
-    public String getFilePath() {return filePath;}
-    public void setFilePath(String filePath) {this.filePath = filePath;}
 
     @Override
     public String toString() {
