@@ -8,10 +8,9 @@ import dk.easv.privatemoviecollection.GUI.Model.CategoryModel;
 import dk.easv.privatemoviecollection.GUI.Model.MovieModel;
 import dk.easv.privatemoviecollection.MovieMain;
 
-// Java imports
-import javafx.application.Platform;
+import javafx.fxml.Initializable;
+import javafx.scene.layout.Pane;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -20,25 +19,27 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
+import java.io.File;
 import java.io.IOException;
-import java.util.EventObject;
-import java.util.List;
-import java.util.Date;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class MovieController {
-
-
+public class MovieController implements Initializable {
 
     @FXML
-    private MediaView mediaView;
-
+    public MediaView mediaView;
+    @FXML
+    public Button btnPlayPause;
     @FXML
     private TextField txtSearch;
 
@@ -49,16 +50,17 @@ public class MovieController {
     private ListView<Category> lstCategory;
 
     @FXML
-    private TableView<Movie> tblMovie;
+    public TableView<Movie> tblMovie;
 
+    private MovieModel movieModel;
+    private CategoryModel categoryModel;
+
+    @FXML
     public TextField txtFileLink;
     @FXML
     private TextField txtRating;
     @FXML
     private TextField txtMovieTitle;
-
-    private MovieModel movieModel;
-    private CategoryModel categoryModel;
 
     @FXML
     private TableColumn<Movie, String> colName;
@@ -72,10 +74,15 @@ public class MovieController {
     @FXML
     private TableColumn<Movie, Float> colPRating;
 
-    @FXML
-    public TableColumn<Movie, Date> colLastView;
+    //@FXML
+    //public TableColumn<Movie, Date> colLastView;
 
-    private javafx.scene.media.MediaPlayer mediaPlayer;
+    @FXML
+    public TableColumn<Movie, String> colFileLink;
+
+    private File file;
+    private Media media;
+    private MediaPlayer mediaPlayer;
 
 
     public MovieController() {
@@ -96,8 +103,8 @@ public class MovieController {
         alert.showAndWait();
     }
 
-    public void initialize() {
-
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
         colName.setCellValueFactory(new PropertyValueFactory<>("name"));
         colRating.setCellValueFactory(new PropertyValueFactory<>("rating"));
         colCategory.setCellValueFactory(cellData -> {
@@ -105,15 +112,11 @@ public class MovieController {
             return new SimpleStringProperty(category != null ? category.getName() : "No Category");
         });
         colPRating.setCellValueFactory(new PropertyValueFactory<>("personalRating"));
-        colLastView.setCellValueFactory(new PropertyValueFactory<>("lastViewed"));
-
-
+        //colLastView.setCellValueFactory(new PropertyValueFactory<>("lastViewed"));
+        colFileLink.setCellValueFactory(new PropertyValueFactory<>("fileLink"));
 
         lstCategory.setItems(categoryModel.getObservableCategory());
-
-
         tblMovie.setItems(movieModel.getObservableMovies());
-
 
         lstCategory.getSelectionModel().selectedItemProperty().addListener((observable, oldCategory, newCategory) -> {
             if (newCategory != null) {
@@ -126,7 +129,6 @@ public class MovieController {
             }
         });
 
-
         txtSearch.textProperty().addListener((observableValue, oldValue, newValue) -> {
             try {
                 movieModel.searchMovie(newValue);
@@ -137,7 +139,14 @@ public class MovieController {
         });
 
 
-        movieDuration.setValue(0);
+        // Media player
+        file = new File("src/main/resources/dk/easv/privatemoviecollection/Movie/215926_tiny.mp4");
+        media = new Media(file.toURI().toString());
+        mediaPlayer = new MediaPlayer(media);
+        mediaView.setMediaPlayer(mediaPlayer);
+
+
+
     }
 
     public void refreshMovie() {
@@ -164,7 +173,7 @@ public class MovieController {
             javafx.scene.media.Media media = new javafx.scene.media.Media(filePath);
 
             // Create a MediaPlayer instance to handle the playback of the video
-            mediaPlayer = new MediaPlayer(media);
+            mediaPlayer = new javafx.scene.media.MediaPlayer(media);
 
             // Set the MediaPlayer to the MediaView
             mediaView.setMediaPlayer(mediaPlayer);
@@ -183,11 +192,11 @@ public class MovieController {
             });
 
             // Allow the user to seek within the video using the slider
-            movieDuration.setOnMouseReleased(event -> {
+            /*movieDuration.setOnMouseReleased(event -> {
                 if (mediaPlayer != null) {
-                    mediaPlayer.seek(Duration.seconds(movieDuration.getValue()));
+                    //mediaPlayer.seek(Duration.seconds(movieDuration.getValue()));
                 }
-            });
+            });*/
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -198,44 +207,42 @@ public class MovieController {
 
     @FXML
     private void btnPlayPause(ActionEvent actionEvent) {
-        if (mediaPlayer != null) {
-            MediaPlayer.Status status = mediaPlayer.getStatus();
-            if (status == MediaPlayer.Status.PLAYING) {
-                mediaPlayer.pause();
-            } else if (status == MediaPlayer.Status.PAUSED || status == MediaPlayer.Status.READY) {
-                mediaPlayer.play();
-            }
+        if (mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
+            mediaPlayer.pause();  // Pause the media player
+            btnPlayPause.setText("Play"); // Change button text to "Play"
         } else {
-            showAlert("No Video", "No video is currently selected.");
-        }
-    }
-
-
-    private void stopVideo() {
-        if (mediaPlayer != null) {
-            mediaPlayer.stop();
-            mediaPlayer = null;
+            mediaPlayer.play();   // Play the media player
+            btnPlayPause.setText("Pause"); // Change button text to "Pause"
         }
     }
 
 
     @FXML
-    private void handleMovieSelection() {
-        // Get the selected movie from the TableView
+    private void handleMovieSelection() throws IOException, URISyntaxException {
+        // Get selected movie from the table view
         Movie selectedMovie = tblMovie.getSelectionModel().getSelectedItem();
-        if (selectedMovie != null) {
-            // Ensure the movie has a valid filePath
-            String filePath = selectedMovie.getFileLink();  // assuming you have filePath set correctly in your Movie object
 
-            if (filePath != null && !filePath.isEmpty()) {
-                playVideo(filePath);  // Call playVideo with the absolute path
+        if (selectedMovie != null) {
+            // Assuming selectedMovie.getFileLink() returns the file path as a string
+            String filePath = selectedMovie.getFileLink();
+            System.out.println("File path: " + filePath);
+
+            // Convert the file path to a valid URI by resolving it as a resource
+            URL resource = getClass().getResource("/" + filePath);
+            if (resource != null) {
+                media = new Media(resource.toURI().toString());
+                mediaPlayer = new MediaPlayer(media);
+                mediaView.setMediaPlayer(mediaPlayer);
+                mediaPlayer.play();
             } else {
-                showAlert("Error", "No file path associated with this movie.");
+                // Handle error: resource not found
+                showAlert("File Not Found", "The movie file could not be found.");
             }
         } else {
             showAlert("Error", "Please select a movie from the table.");
         }
     }
+
 
 
 
@@ -356,16 +363,13 @@ public class MovieController {
         Category selectedCategory = lstCategory.getSelectionModel().getSelectedItem();
 
         if (selectedCategory != null) {
-            // Show a confirmation alert before deletion
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Confirm Deletion");
             alert.setHeaderText("Are you sure you want to delete this category?");
             alert.setContentText("This action cannot be undone.");
 
-            // Wait for user response
             ButtonType result = alert.showAndWait().orElse(ButtonType.CANCEL);
 
-            // If user confirms, delete the category
             if (result == ButtonType.OK) {
                 categoryModel.deleteCategory(selectedCategory);
                 refreshCategory();
@@ -391,7 +395,5 @@ public class MovieController {
         stage.showAndWait();
 
         refreshMovie();
-
     }
-
 }

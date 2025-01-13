@@ -86,15 +86,9 @@ public class Movie {
         this.category = category;
     }
 
-    public Movie(int id, String movieTitle, Float rating) {
-        this.id = id;
-        this.name = movieTitle;
-        this.rating = rating;
 
-    }
 
-    public Movie(int i, String movieTitle, Float rating, String selectedCategory) {
-    }
+
 
     public Movie(){
         this.id = 0;
@@ -139,9 +133,8 @@ public class Movie {
     }
 
     public Date getLastView() {
-        return (lastView != null) ? Date.valueOf(String.valueOf(lastView)) : null;
+        return lastView;
     }
-
     public void setLastView(Date lastView) {
         this.lastView = lastView;
     }

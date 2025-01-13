@@ -24,6 +24,7 @@ import java.util.List;
 
 public class NewMovieController {
 
+    @FXML
     public TextField txtFileLink;
     @FXML
     private TextField txtRating;
