@@ -48,6 +48,6 @@ public class CategoryModel {
 
     public void refreshCategories() throws Exception {
         List<Category> categoriesFromDB = categoryManager.getAllCategories();
-        lstCategory.setAll(categoriesFromDB);  // This will update the ObservableList
+        lstCategory.setAll(categoriesFromDB);
     }
 }

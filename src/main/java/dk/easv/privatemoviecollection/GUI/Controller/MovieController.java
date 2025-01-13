@@ -155,7 +155,6 @@ public class MovieController implements Initializable {
             try {
                 categoryModel.refreshCategories();
                 lstCategory.setItems(categoryModel.getObservableCategory());  // Update ListView
-                System.out.println("Categories refreshed dynamically.");
             } catch (Exception e) {
                 e.printStackTrace();
                 showAlert("Error", "Failed to refresh categories.");
@@ -253,7 +252,7 @@ public class MovieController implements Initializable {
         }
     }
 
-    private void showAlert(String title, String message) {
+    void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
         alert.setHeaderText(null);

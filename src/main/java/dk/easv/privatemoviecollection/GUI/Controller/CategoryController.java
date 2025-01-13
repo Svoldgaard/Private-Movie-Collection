@@ -32,7 +32,7 @@ public class CategoryController {
             Category newCategory = new Category(-1, categoryName);
             try {
                 categoryModel.addCategories(newCategory);
-                movieController.refreshCategory();  // Refresh categories after adding
+                movieController.refreshCategory();
                 ((Stage) (((Button) actionEvent.getSource()).getScene().getWindow())).close();
             } catch (Exception e) {
                 e.printStackTrace();
