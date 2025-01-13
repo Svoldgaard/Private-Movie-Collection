@@ -3,13 +3,12 @@ package dk.easv.privatemoviecollection.GUI.Controller;
 // Project imports
 import dk.easv.privatemoviecollection.BE.Category;
 import dk.easv.privatemoviecollection.BE.Movie;
-import dk.easv.privatemoviecollection.DLL.DBConnection.DB_Connect;
 import dk.easv.privatemoviecollection.GUI.Model.CategoryModel;
 import dk.easv.privatemoviecollection.GUI.Model.MovieModel;
 import dk.easv.privatemoviecollection.MovieMain;
 
+import javafx.application.Platform;
 import javafx.fxml.Initializable;
-import javafx.scene.layout.Pane;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -20,8 +19,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
@@ -153,66 +150,28 @@ public class MovieController implements Initializable {
         tblMovie.setItems(movieModel.getObservableMovies());
     }
 
-    public void refreshCategory() {
-        lstCategory.setItems(categoryModel.getObservableCategory());
-    }
-
-
-
-    private void playVideo(String fileName) {
-        if (mediaPlayer != null) {
-            mediaPlayer.stop();  // Stop any currently playing video
-        }
-
-        try {
-            // Get the file path from the database (make sure it's correctly formatted)
-            // Example of resolving the file path
-            String filePath = "file:" + getClass().getResource("/dk/easv/privatemoviecollection/Movie/" + fileName).toExternalForm();
-
-            // Create a Media instance using the resolved file path
-            javafx.scene.media.Media media = new javafx.scene.media.Media(filePath);
-
-            // Create a MediaPlayer instance to handle the playback of the video
-            mediaPlayer = new javafx.scene.media.MediaPlayer(media);
-
-            // Set the MediaPlayer to the MediaView
-            mediaView.setMediaPlayer(mediaPlayer);
-
-            // Start playing the video as soon as it's ready
-            mediaPlayer.setOnReady(() -> mediaPlayer.play());
-
-            // Update the duration slider as the video plays
-            mediaPlayer.currentTimeProperty().addListener((observable, oldValue, newValue) -> {
-                movieDuration.setValue(newValue.toSeconds());
-            });
-
-            // Set the total duration on the slider when the video is ready
-            mediaPlayer.setOnReady(() -> {
-                movieDuration.setMax(mediaPlayer.getTotalDuration().toSeconds());
-            });
-
-            // Allow the user to seek within the video using the slider
-            /*movieDuration.setOnMouseReleased(event -> {
-                if (mediaPlayer != null) {
-                    //mediaPlayer.seek(Duration.seconds(movieDuration.getValue()));
-                }
-            });*/
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            showAlert("Error", "Failed to play the selected video.");
-        }
+    public void refreshCategory() throws Exception {
+        Platform.runLater(() -> {
+            try {
+                categoryModel.refreshCategories();
+                lstCategory.setItems(categoryModel.getObservableCategory());  // Update ListView
+                System.out.println("Categories refreshed dynamically.");
+            } catch (Exception e) {
+                e.printStackTrace();
+                showAlert("Error", "Failed to refresh categories.");
+            }
+        });
     }
 
 
     @FXML
     private void btnPlayPause(ActionEvent actionEvent) {
         if (mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
-            mediaPlayer.pause();  // Pause the media player
-            btnPlayPause.setText("Play"); // Change button text to "Play"
+            mediaPlayer.pause();
+            btnPlayPause.setText("Play");
         } else {
-            mediaPlayer.play();   // Play the media player
-            btnPlayPause.setText("Pause"); // Change button text to "Pause"
+            mediaPlayer.play();
+            btnPlayPause.setText("Pause");
         }
     }
 
@@ -257,7 +216,7 @@ public class MovieController implements Initializable {
 
 
     @FXML
-    private void btnAddCategory(ActionEvent actionEvent) throws IOException {
+    private void btnAddCategory(ActionEvent actionEvent) throws Exception {
         FXMLLoader fxmlLoader = new FXMLLoader(MovieMain.class.getResource("/dk/easv/privatemoviecollection/FXML/AddCategory.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         Stage stage = new Stage();
@@ -301,7 +260,7 @@ public class MovieController implements Initializable {
     }
 
 
-    private void showAlert(String title, String message) {
+    void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
         alert.setHeaderText(null);

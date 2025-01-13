@@ -22,28 +22,32 @@ public class CategoryModel {
         return lstCategory;
     }
 
+    // Adding a new category
     public Category addCategories(Category category) throws Exception {
         Category createdCategory = categoryManager.createCategory(category);
         lstCategory.add(createdCategory);
         return createdCategory;
     }
 
+    // Deleting a category
     public void deleteCategory(Category category) throws Exception {
         categoryManager.deleteCategory(category);
         lstCategory.remove(category);
     }
 
+    // Updating a category
     public void updateCategory(Category category) throws Exception {
         categoryManager.updateCategory(category);
         refreshCategories();
     }
 
+    // Returns an ObservableList of categories
     public ObservableList<Category> getObservableCategory() {
         return lstCategory;
     }
 
-    private void refreshCategories() throws Exception {
+    public void refreshCategories() throws Exception {
         List<Category> categoriesFromDB = categoryManager.getAllCategories();
-        lstCategory = FXCollections.observableArrayList(categoriesFromDB);
+        lstCategory.setAll(categoriesFromDB);  // This will update the ObservableList
     }
 }
