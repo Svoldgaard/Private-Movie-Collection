@@ -1,7 +1,9 @@
 package dk.easv.privatemoviecollection.GUI.Controller;
 
+// Project imports
 import dk.easv.privatemoviecollection.BE.Category;
 import dk.easv.privatemoviecollection.BE.Movie;
+import dk.easv.privatemoviecollection.DLL.DBConnection.DB_Connect;
 import dk.easv.privatemoviecollection.GUI.Model.CategoryModel;
 import dk.easv.privatemoviecollection.GUI.Model.MovieModel;
 import dk.easv.privatemoviecollection.MovieMain;
@@ -20,7 +22,10 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -72,7 +77,7 @@ public class MovieController implements Initializable {
     private Media media;
     private MediaPlayer mediaPlayer;
 
-
+    private javafx.scene.media.MediaPlayer mediaPlayer;
 
     public MovieController() {
         try {
@@ -147,6 +152,53 @@ public class MovieController implements Initializable {
     }
 
 
+
+    private void playVideo(String fileName) {
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();  // Stop any currently playing video
+        }
+
+        try {
+            // Get the file path from the database (make sure it's correctly formatted)
+            // Example of resolving the file path
+            String filePath = "file:" + getClass().getResource("/dk/easv/privatemoviecollection/Movie/" + fileName).toExternalForm();
+
+            // Create a Media instance using the resolved file path
+            javafx.scene.media.Media media = new javafx.scene.media.Media(filePath);
+
+            // Create a MediaPlayer instance to handle the playback of the video
+            mediaPlayer = new javafx.scene.media.MediaPlayer(media);
+
+            // Set the MediaPlayer to the MediaView
+            mediaView.setMediaPlayer(mediaPlayer);
+
+            // Start playing the video as soon as it's ready
+            mediaPlayer.setOnReady(() -> mediaPlayer.play());
+
+            // Update the duration slider as the video plays
+            mediaPlayer.currentTimeProperty().addListener((observable, oldValue, newValue) -> {
+                movieDuration.setValue(newValue.toSeconds());
+            });
+
+            // Set the total duration on the slider when the video is ready
+            mediaPlayer.setOnReady(() -> {
+                movieDuration.setMax(mediaPlayer.getTotalDuration().toSeconds());
+            });
+
+            // Allow the user to seek within the video using the slider
+            movieDuration.setOnMouseReleased(event -> {
+                if (mediaPlayer != null) {
+                    mediaPlayer.seek(Duration.seconds(movieDuration.getValue()));
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Error", "Failed to play the selected video.");
+        }
+    }
+
+
     @FXML
     private void btnPlayPause(ActionEvent actionEvent) {
         if (mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
@@ -180,6 +232,8 @@ public class MovieController implements Initializable {
                 // Handle error: resource not found
                 showAlert("File Not Found", "The movie file could not be found.");
             }
+        } else {
+            showAlert("Error", "Please select a movie from the table.");
         }
     }
 
@@ -195,6 +249,7 @@ public class MovieController implements Initializable {
         stage.show();
     }
 
+
     @FXML
     private void btnAddCategory(ActionEvent actionEvent) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(MovieMain.class.getResource("/dk/easv/privatemoviecollection/FXML/AddCategory.fxml"));
@@ -206,21 +261,24 @@ public class MovieController implements Initializable {
         controller.setMovieController(this);
 
         stage.showAndWait();
+
         refreshCategory();
     }
+
 
     @FXML
     private void btnDeleteMovie(ActionEvent actionEvent) throws Exception {
         Movie selectedMovie = tblMovie.getSelectionModel().getSelectedItem();
 
         if (selectedMovie != null) {
+
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Confirm Deletion");
             alert.setHeaderText("Are you sure you want to delete this movie?");
             alert.setContentText("Movie: " + selectedMovie.getName() + "\nThis action cannot be undone.");
 
             ButtonType result = alert.showAndWait().orElse(ButtonType.CANCEL);
-
+            
             if (result == ButtonType.OK) {
                 movieModel.deleteMovie(selectedMovie);
                 refreshMovie();
@@ -229,6 +287,13 @@ public class MovieController implements Initializable {
             showAlert("No Selection", "Please select a movie to delete.");
         }
     }
+
+
+    @FXML
+    private void btnEditRating(ActionEvent actionEvent) {
+
+    }
+
 
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -239,22 +304,61 @@ public class MovieController implements Initializable {
     }
 
     @FXML
-    private boolean btnEditMovie() throws Exception {
+    private void btnEditMovie(ActionEvent actionEvent) throws IOException {
+        Movie selectedMovie = tblMovie.getSelectionModel().getSelectedItem();
+        if (selectedMovie == null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("No selection.");
+            alert.setHeaderText("No movie selected.");
+            alert.setContentText("Please select a movie from the table.");
+            alert.showAndWait();
+            return;
+        }
+
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/dk/easv/privatemoviecollection/FXML/AddMovie.fxml"));
             Parent root = fxmlLoader.load();
 
             NewMovieController controller = fxmlLoader.getController();
-            controller.setMovieController(this);
+            if (controller != null) {
+                controller.setMovie(selectedMovie);
+            }
+            else{
+                showAlert("Error", "Failed to load the movie editor.");
+                return;
+            }
 
             Stage stage = new Stage();
+            stage.setTitle("Edit Movie");
             stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.showAndWait();
+
+            tblMovie.refresh();
         }
-        return false;
+        catch(IOException ex) {
+            ex.printStackTrace();
+            showAlert("Error", "Failed to load the movie editor.");
+        }
+
+        try {
+            float rating = Float.parseFloat(txtRating.getText());
+            String movieTitle = txtMovieTitle.getText();
+
+            if(movieTitle.isEmpty()){
+                showAlert("Error", "Movie Title can't be empty.");
+                return;
+            }
+
+            selectedMovie.setName(movieTitle);
+            selectedMovie.setRating(rating);
+            selectedMovie.setFilePath(txtFileLink.getText());
+        }
+        catch (NumberFormatException e) {
+            showAlert("Error", "Please enter a valid number for the rating.");
+        }
     }
+
 
     public void btnDeleteCategory(ActionEvent actionEvent) throws Exception {
         Category selectedCategory = lstCategory.getSelectionModel().getSelectedItem();
