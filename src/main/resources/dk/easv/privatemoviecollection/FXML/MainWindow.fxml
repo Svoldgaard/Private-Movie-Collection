@@ -10,7 +10,7 @@
 <?import javafx.scene.media.MediaView?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="432.0" prefWidth="942.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.privatemoviecollection.GUI.Controller.MovieController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="432.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.privatemoviecollection.GUI.Controller.MovieController">
    <children>
       <Button layoutX="201.0" layoutY="312.0" mnemonicParsing="false" onAction="#btnAddMovie" text="Add Movie" />
       <Button layoutX="201.0" layoutY="351.0" mnemonicParsing="false" onAction="#btnDeleteMovie" text="Delete Movie" />
@@ -18,18 +18,19 @@
       <Button layoutX="27.0" layoutY="312.0" mnemonicParsing="false" onAction="#btnAddCategory" text="Add Category" />
       <Button layoutX="27.0" layoutY="351.0" mnemonicParsing="false" onAction="#btnDeleteCategory" text="Delete Category" />
       <Button layoutX="505.0" layoutY="312.0" mnemonicParsing="false" onAction="#btnAddRating" text="Add/Edit rating" />
-      <MediaView fx:id="MediaView" fitHeight="200.0" fitWidth="200.0" layoutX="704.0" layoutY="100.0" opacity="0.0" />
-      <Button layoutX="788.0" layoutY="325.0" mnemonicParsing="false" onAction="#btnPlayPause" text="Play/Pause" />
-      <Slider fx:id="movieDuration" layoutX="755.0" layoutY="305.0" />
+      <MediaView fx:id="mediaView" fitHeight="350.0" fitWidth="400.0" layoutX="773.0" layoutY="14.0" />
+      <Button fx:id="btnPlayPause" layoutX="934.0" layoutY="393.0" mnemonicParsing="false" onAction="#btnPlayPause" text="Play" />
+      <Slider fx:id="movieDuration" layoutX="903.0" layoutY="377.0" />
       <Button layoutX="300.0" layoutY="312.0" mnemonicParsing="false" onAction="#btnEditMovie" text="Edit Movie" />
       <ListView fx:id="lstCategory" layoutX="23.0" layoutY="100.0" prefHeight="200.0" prefWidth="150.0" />
-      <TableView fx:id="tblMovie" layoutX="191.0" layoutY="100.0" prefHeight="200.0" prefWidth="483.0">
+      <TableView fx:id="tblMovie" layoutX="191.0" layoutY="100.0" onMouseClicked="#handleMovieSelection" prefHeight="200.0" prefWidth="573.0">
         <columns>
           <TableColumn fx:id="colName" prefWidth="170.4000244140625" text="Name" />
             <TableColumn fx:id="colRating" prefWidth="77.5999755859375" text="IMDB Rating" />
             <TableColumn fx:id="colCategory" prefWidth="62.39996337890625" text="Category" />
             <TableColumn fx:id="colPRating" prefWidth="102.40011596679688" text="Personal Rating" />
             <TableColumn fx:id="colLastView" prefWidth="75.0" text="Last View" />
+            <TableColumn fx:id="colFileLink" prefWidth="75.0" text="filepath" />
         </columns>
       </TableView>
       <Text layoutX="24.0" layoutY="83.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Category" />

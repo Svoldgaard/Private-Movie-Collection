@@ -10,7 +10,7 @@ public class MovieMain extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(MovieMain.class.getResource("/dk/easv/privatemoviecollection/FXML/MainWindow.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 950, 432);
+        Scene scene = new Scene(fxmlLoader.load(), 1200, 432);
         stage.setTitle("Private Movie Collection");
         stage.setScene(scene);
         stage.show();

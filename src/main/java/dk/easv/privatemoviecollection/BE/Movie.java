@@ -85,15 +85,9 @@ public class Movie {
         this.category = category;
     }
 
-    public Movie(int id, String movieTitle, Float rating) {
-        this.id = id;
-        this.name = movieTitle;
-        this.rating = rating;
 
-    }
 
-    public Movie(int i, String movieTitle, Float rating, String selectedCategory) {
-    }
+
 
     public int getId() {
         return id;
@@ -128,9 +122,8 @@ public class Movie {
     }
 
     public Date getLastView() {
-        return (lastView != null) ? Date.valueOf(String.valueOf(lastView)) : null;
+        return lastView;
     }
-
     public void setLastView(Date lastView) {
         this.lastView = lastView;
     }
@@ -142,9 +135,6 @@ public class Movie {
     public Category getCategory() {
         return category;
     }
-
-    public String getFilePath() {return filePath;}
-    public void setFilePath(String filePath) {this.filePath = filePath;}
 
     @Override
     public String toString() {
