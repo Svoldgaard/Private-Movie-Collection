@@ -18,8 +18,6 @@ public class Category_DB implements ICategoryDataAccess {
         try (Connection conn = dbConnect.getConnection(); Statement stmt = conn.createStatement()) {
             // Debugging: Log the actual SQL query to confirm it's correct
             String sql = "SELECT * FROM category";
-            System.out.println("Executing SQL query: " + sql);
-
             ResultSet rs = stmt.executeQuery(sql);
 
             while (rs.next()) {
@@ -29,9 +27,6 @@ public class Category_DB implements ICategoryDataAccess {
                 Category category = new Category(id, name);
                 allCategories.add(category);
             }
-
-            // Debugging: Log the results
-            System.out.println("Fetched categories: " + allCategories.size());
 
             return allCategories;
         } catch (SQLException ex) {

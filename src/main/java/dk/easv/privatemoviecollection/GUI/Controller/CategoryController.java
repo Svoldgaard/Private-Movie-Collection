@@ -28,24 +28,22 @@ public class CategoryController {
     @FXML
     private void btnSave(ActionEvent actionEvent) {
         String categoryName = txtCategory.getText();
-
         if (categoryName != null && !categoryName.isEmpty()) {
             Category newCategory = new Category(-1, categoryName);
             try {
                 categoryModel.addCategories(newCategory);
-
-                if (movieController != null) {
-                    Platform.runLater(() -> movieController.refreshCategory());
-                }
-
+                movieController.refreshCategory();
                 ((Stage) (((Button) actionEvent.getSource()).getScene().getWindow())).close();
             } catch (Exception e) {
                 e.printStackTrace();
+                movieController.showAlert("Error", "Failed to add the category.");
             }
         } else {
             System.out.println("Category name cannot be empty.");
         }
     }
+
+
 
     @FXML
     private void btnCancel(ActionEvent actionEvent) {
