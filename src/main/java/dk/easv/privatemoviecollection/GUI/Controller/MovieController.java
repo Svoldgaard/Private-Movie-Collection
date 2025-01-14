@@ -29,9 +29,11 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.ResourceBundle;
+
 
 public class MovieController implements Initializable {
 
@@ -73,8 +75,8 @@ public class MovieController implements Initializable {
     @FXML
     private TableColumn<Movie, Float> colPRating;
 
-    //@FXML
-    //public TableColumn<Movie, Date> colLastView;
+    @FXML
+    public TableColumn<Movie, LocalDate> colLastView;
 
     @FXML
     public TableColumn<Movie, String> colFileLink;
@@ -111,7 +113,7 @@ public class MovieController implements Initializable {
             return new SimpleStringProperty(category != null ? category.getName() : "No Category");
         });
         colPRating.setCellValueFactory(new PropertyValueFactory<>("personalRating"));
-        //colLastView.setCellValueFactory(new PropertyValueFactory<>("lastViewed"));
+        colLastView.setCellValueFactory(new PropertyValueFactory<>("formattedLastView"));
         colFileLink.setCellValueFactory(new PropertyValueFactory<>("fileLink"));
 
         lstCategory.setItems(categoryModel.getObservableCategory());
@@ -189,15 +191,12 @@ public class MovieController implements Initializable {
 
     @FXML
     private void handleMovieSelection() throws IOException, URISyntaxException {
-        // Get selected movie from the table view
         Movie selectedMovie = tblMovie.getSelectionModel().getSelectedItem();
 
         if (selectedMovie != null) {
-            // Assuming selectedMovie.getFileLink() returns the file path as a string
             String filePath = selectedMovie.getFileLink();
             System.out.println("File path: " + filePath);
 
-            // Convert the file path to a valid URI by resolving it as a resource
             URL resource = getClass().getResource("/" + filePath);
             if (resource != null) {
                 media = new Media(resource.toURI().toString());
@@ -205,7 +204,6 @@ public class MovieController implements Initializable {
                 mediaView.setMediaPlayer(mediaPlayer);
                 mediaPlayer.play();
             } else {
-                // Handle error: resource not found
                 showAlert("File Not Found", "The movie file could not be found.");
             }
         } else {
@@ -365,10 +363,9 @@ public class MovieController implements Initializable {
 
         List<Movie> moviesToWarn = allMovies.stream()
                 .filter(movie -> {
-                    // Check if either condition is true
                     boolean isLowRating = movie.getPersonalRating() < 6;
                     boolean isNotWatchedIn2Years = movie.getLastView() == null ||
-                            movie.getLastView().toLocalDate().isBefore(LocalDate.now().minusYears(2));
+                            movie.getLastView().isBefore(LocalDate.now().minusYears(2));
 
                     return isLowRating || isNotWatchedIn2Years;
                 })
@@ -387,6 +384,4 @@ public class MovieController implements Initializable {
             alert.showAndWait();
         }
     }
-
-
 }

@@ -43,7 +43,7 @@ public class Movie_DAO implements IMovieDataAccess {
                 category.setName(categoryName);
 
 
-                Movie movie = new Movie(id, name, rating,personalRating, lastView,fileLink);
+                Movie movie = new Movie(id, name, rating, fileLink, lastView.toLocalDate(), personalRating);
                 movie.setCategory(category);
 
                 allMovies.add(movie);
@@ -67,8 +67,8 @@ public class Movie_DAO implements IMovieDataAccess {
             try (PreparedStatement movieStmt = conn.prepareStatement(movieSql, Statement.RETURN_GENERATED_KEYS)) {
                 movieStmt.setString(1, movie.getName());
                 movieStmt.setFloat(2, movie.getRating());
-                movieStmt.setString(3, movie.getFileLink());  // Save the file link
-                movieStmt.setTimestamp(4, new java.sql.Timestamp(System.currentTimeMillis()));  // Set current timestamp for LastView
+                movieStmt.setString(3, movie.getFileLink());
+                movieStmt.setTimestamp(4, new java.sql.Timestamp(System.currentTimeMillis()));
 
                 movieStmt.executeUpdate();
 
@@ -122,8 +122,8 @@ public class Movie_DAO implements IMovieDataAccess {
 
             stmt.setString(1, movie.getName());
             stmt.setFloat(2, movie.getRating());
-            stmt.setString(3, movie.getFileLink());  // Update the file link
-            stmt.setTimestamp(4, new java.sql.Timestamp(System.currentTimeMillis()));  // Set the last view time
+            stmt.setString(3, movie.getFileLink());
+            stmt.setTimestamp(4, new java.sql.Timestamp(System.currentTimeMillis()));
             stmt.setFloat(5, movie.getPersonalRating());
             stmt.setInt(6, movie.getId());
 
@@ -140,7 +140,6 @@ public class Movie_DAO implements IMovieDataAccess {
     public void deleteMovie(Movie movie) throws Exception {
         DB_Connect dbConnect = new DB_Connect();
 
-        // SQL to check how many categories the movie is linked to
         String checkCategorySql = "SELECT COUNT(*) FROM CatMovie WHERE MovieID = ?";
 
         try (Connection conn = dbConnect.getConnection();
@@ -152,25 +151,21 @@ public class Movie_DAO implements IMovieDataAccess {
             if (rs.next()) {
                 int count = rs.getInt(1);
 
-                // If the movie is linked to more than one category, just remove the category association
                 if (count > 1) {
                     String sql = "DELETE FROM CatMovie WHERE MovieID = ? AND CategoryID = ?";
                     try (PreparedStatement stmt = conn.prepareStatement(sql)) {
                         stmt.setInt(1, movie.getId());
-                        stmt.setInt(2, movie.getCategory().getID());  // Remove specific category association
+                        stmt.setInt(2, movie.getCategory().getID());
                         stmt.executeUpdate();
                     }
                 }
-                // If the movie is linked to only one category, delete the relationship and the movie
                 else {
-                    // Delete the relationship in CatMovie first
                     String deleteCatMovieSql = "DELETE FROM CatMovie WHERE MovieID = ?";
                     try (PreparedStatement stmt = conn.prepareStatement(deleteCatMovieSql)) {
                         stmt.setInt(1, movie.getId());
                         stmt.executeUpdate();
                     }
 
-                    // Now, delete the movie entirely
                     String deleteMovieSql = "DELETE FROM Movie WHERE ID = ?";
                     try (PreparedStatement stmt = conn.prepareStatement(deleteMovieSql)) {
                         stmt.setInt(1, movie.getId());
