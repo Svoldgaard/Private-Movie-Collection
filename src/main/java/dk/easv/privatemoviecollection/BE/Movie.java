@@ -11,7 +11,7 @@ public class Movie {
     private String name;
     private float rating;
     private String fileLink;
-    private LocalDate lastView;  // Use LocalDate instead of Date
+    private LocalDate lastView;
     private float personalRating;
     private Category category;
     private List<Category> categories;
@@ -99,7 +99,7 @@ public class Movie {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             return lastView.format(formatter);  // Format as "yyyy-MM-dd"
         } else {
-            return "No Date";  
+            return "No Date";
         }
     }
 
