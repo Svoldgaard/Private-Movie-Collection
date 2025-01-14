@@ -70,4 +70,9 @@
             return tblMovie;
         }
 
+        public void refreshMovie() throws Exception {
+            List<Movie> movieFromDB = movieManager.getAllMovies();
+            tblMovie.setAll(movieFromDB);
+        }
+
     }

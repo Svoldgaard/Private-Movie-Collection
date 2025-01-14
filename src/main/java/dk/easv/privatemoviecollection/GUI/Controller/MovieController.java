@@ -147,7 +147,15 @@ public class MovieController implements Initializable {
     }
 
     public void refreshMovie() {
-        tblMovie.setItems(movieModel.getObservableMovies());
+        Platform.runLater(() -> {
+            try {
+                movieModel.refreshMovie();
+                tblMovie.setItems(movieModel.getObservableMovies());  // Update ListView
+            } catch (Exception e) {
+                e.printStackTrace();
+                showAlert("Error", "Failed to refresh categories.");
+            }
+        });
     }
 
     public void refreshCategory() throws Exception {
@@ -210,7 +218,8 @@ public class MovieController implements Initializable {
         Scene scene = new Scene(fxmlLoader.load());
         Stage stage = new Stage();
         stage.setScene(scene);
-        stage.show();
+        stage.showAndWait();
+        refreshMovie();
     }
 
 
