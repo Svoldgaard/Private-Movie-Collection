@@ -10,30 +10,33 @@
 <?import javafx.scene.media.MediaView?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="432.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.privatemoviecollection.GUI.Controller.MovieController">
-   <children>
-      <Button layoutX="201.0" layoutY="312.0" mnemonicParsing="false" onAction="#btnAddMovie" text="Add Movie" />
-      <Button layoutX="201.0" layoutY="351.0" mnemonicParsing="false" onAction="#btnDeleteMovie" text="Delete Movie" />
-      <TextField fx:id="txtSearch" layoutX="23.0" layoutY="34.0" promptText="Search" />
-      <Button layoutX="27.0" layoutY="312.0" mnemonicParsing="false" onAction="#btnAddCategory" text="Add Category" />
-      <Button layoutX="27.0" layoutY="351.0" mnemonicParsing="false" onAction="#btnDeleteCategory" text="Delete Category" />
-      <Button layoutX="505.0" layoutY="312.0" mnemonicParsing="false" onAction="#btnAddRating" text="Add/Edit rating" />
-      <MediaView fx:id="mediaView" fitHeight="350.0" fitWidth="500.0" layoutX="684.0" layoutY="14.0" />
-      <Button fx:id="btnPlayPause" layoutX="934.0" layoutY="385.0" mnemonicParsing="false" onAction="#btnPlayPause" text="Play" />
-      <Slider fx:id="movieDuration" layoutX="884.0" layoutY="369.0" />
-      <Button layoutX="300.0" layoutY="312.0" mnemonicParsing="false" onAction="#btnEditMovie" text="Edit Movie" />
-      <ListView fx:id="lstCategory" layoutX="23.0" layoutY="100.0" prefHeight="200.0" prefWidth="150.0" />
-      <TableView fx:id="tblMovie" layoutX="191.0" layoutY="100.0" onMouseClicked="#handleMovieSelection" prefHeight="200.0" prefWidth="492.0">
-        <columns>
-          <TableColumn fx:id="colName" prefWidth="146.5" text="Name" />
-            <TableColumn fx:id="colRating" prefWidth="85.0" text="IMDB Rating" />
-            <TableColumn fx:id="colCategory" prefWidth="64.5" text="Category" />
-            <TableColumn fx:id="colPRating" prefWidth="90.5" text="Personal Rating" />
-            <TableColumn fx:id="colLastView" prefWidth="102.0" text="Last View" />
-            <TableColumn fx:id="colFileLink" editable="false" prefWidth="75.0" sortable="false" text="filepath" visible="false" />
-        </columns>
-      </TableView>
-      <Text layoutX="24.0" layoutY="83.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Category" />
-      <Text layoutX="194.0" layoutY="83.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Movie" />
-   </children>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="432.0" prefWidth="1200.0" style="-fx-background-color: gray;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.privatemoviecollection.GUI.Controller.MovieController">
+    <children>
+        <Button layoutX="201.0" layoutY="312.0" mnemonicParsing="false" onAction="#btnAddMovie" style="-fx-background-color: lightgreen;" text="Add Movie" />
+        <Button layoutX="201.0" layoutY="351.0" mnemonicParsing="false" onAction="#btnDeleteMovie" style="-fx-background-color: lightgreen;" text="Delete Movie" />
+        <TextField fx:id="txtSearch" layoutX="23.0" layoutY="34.0" promptText="Search" style="-fx-background-color: lightgreen;" />
+        <Button layoutX="27.0" layoutY="312.0" mnemonicParsing="false" onAction="#btnAddCategory" style="-fx-background-color: lightgreen;" text="Add Category" />
+        <Button layoutX="27.0" layoutY="351.0" mnemonicParsing="false" onAction="#btnDeleteCategory" style="-fx-background-color: lightgreen;" text="Delete Category" />
+        <Button layoutX="505.0" layoutY="312.0" mnemonicParsing="false" onAction="#btnAddRating" style="-fx-background-color: lightgreen;" text="Add/Edit rating" />
+        <MediaView fx:id="mediaView" fitHeight="350.0" fitWidth="500.0" layoutX="684.0" layoutY="14.0" />
+
+        <!-- Apply styleClass only to btnPlayPause -->
+        <Button fx:id="btnPlayPause" graphicTextGap="0.0" layoutX="934.0" layoutY="385.0" mnemonicParsing="false" onAction="#btnPlayPause" styleClass="button-no-border" stylesheets="@../../../../CSS/CSS.css" />
+
+        <Slider fx:id="movieDuration" layoutX="884.0" layoutY="369.0" />
+        <Button layoutX="300.0" layoutY="312.0" mnemonicParsing="false" onAction="#btnEditMovie" style="-fx-background-color: lightgreen;" text="Edit Movie" />
+        <ListView fx:id="lstCategory" layoutX="23.0" layoutY="100.0" prefHeight="200.0" prefWidth="150.0" style="-fx-background-color: lightgreen;" />
+        <TableView fx:id="tblMovie" layoutX="191.0" layoutY="100.0" onMouseClicked="#handleMovieSelection" prefHeight="200.0" prefWidth="492.0" style="-fx-background-color: lightgreen;">
+            <columns>
+                <TableColumn fx:id="colName" prefWidth="146.5" text="Name" />
+                <TableColumn fx:id="colRating" prefWidth="85.0" text="IMDB Rating" />
+                <TableColumn fx:id="colCategory" prefWidth="64.5" text="Category" />
+                <TableColumn fx:id="colPRating" prefWidth="90.5" text="Personal Rating" />
+                <TableColumn fx:id="colLastView" prefWidth="102.0" text="Last View" />
+                <TableColumn fx:id="colFileLink" editable="false" prefWidth="75.0" sortable="false" text="filepath" visible="false" />
+            </columns>
+        </TableView>
+        <Text layoutX="24.0" layoutY="83.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Category" />
+        <Text layoutX="194.0" layoutY="83.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Movie" />
+    </children>
 </AnchorPane>

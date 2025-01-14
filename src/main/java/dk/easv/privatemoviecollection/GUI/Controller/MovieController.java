@@ -19,6 +19,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
@@ -32,6 +34,7 @@ import java.net.URL;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 
@@ -148,6 +151,8 @@ public class MovieController implements Initializable {
         mediaPlayer = new MediaPlayer(media);
         mediaView.setMediaPlayer(mediaPlayer);
 
+        // set icon
+        setButtonIcon(btnPlayPause, "/dk/easv/privatemoviecollection/Icon/playbutton.png");
 
 
     }
@@ -181,10 +186,10 @@ public class MovieController implements Initializable {
     private void btnPlayPause(ActionEvent actionEvent) {
         if (mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
             mediaPlayer.pause();
-            btnPlayPause.setText("Play");
+            setButtonIcon(btnPlayPause, "/dk/easv/privatemoviecollection/Icon/playbutton.png");
         } else {
             mediaPlayer.play();
-            btnPlayPause.setText("Pause");
+            setButtonIcon(btnPlayPause, "/dk/easv/privatemoviecollection/Icon/pause.png");
         }
     }
 
@@ -383,5 +388,10 @@ public class MovieController implements Initializable {
             alert.setContentText(warningMessage.toString());
             alert.showAndWait();
         }
+    }
+
+    private void setButtonIcon(Button button, String iconPath) {
+        Image icon = new Image(Objects.requireNonNull(getClass().getResourceAsStream(iconPath)));
+        button.setGraphic(new ImageView(icon)); // Set the button graphic
     }
 }
