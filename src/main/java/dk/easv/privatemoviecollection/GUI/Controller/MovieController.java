@@ -29,6 +29,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.time.LocalDate;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class MovieController implements Initializable {
@@ -134,6 +136,8 @@ public class MovieController implements Initializable {
                 displayError(e);
             }
         });
+
+        showWarningIfNeeded();
 
 
         // Media player
@@ -355,4 +359,34 @@ public class MovieController implements Initializable {
 
         refreshMovie();
     }
+
+    private void showWarningIfNeeded() {
+        ObservableList<Movie> allMovies = movieModel.getObservableMovies();
+
+        List<Movie> moviesToWarn = allMovies.stream()
+                .filter(movie -> {
+                    // Check if either condition is true
+                    boolean isLowRating = movie.getPersonalRating() < 6;
+                    boolean isNotWatchedIn2Years = movie.getLastView() == null ||
+                            movie.getLastView().toLocalDate().isBefore(LocalDate.now().minusYears(2));
+
+                    return isLowRating || isNotWatchedIn2Years;
+                })
+                .toList();
+
+        if (!moviesToWarn.isEmpty()) {
+            StringBuilder warningMessage = new StringBuilder("Please review the following movies:\n");
+            for (Movie movie : moviesToWarn) {
+                warningMessage.append("- ").append(movie.getName()).append("\n");
+            }
+
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Movies to Review");
+            alert.setHeaderText("Some movies require your attention:");
+            alert.setContentText(warningMessage.toString());
+            alert.showAndWait();
+        }
+    }
+
+
 }
