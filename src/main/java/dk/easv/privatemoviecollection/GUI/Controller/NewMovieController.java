@@ -53,6 +53,7 @@ public class NewMovieController {
             }
 
             lstCategory.setItems(categoryList);
+            lstCategory.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
         } catch (Exception e) {
             showAlert("Error", "Failed to load categories from the database.");
