@@ -2,6 +2,7 @@ package dk.easv.privatemoviecollection.GUI.Controller;
 
 import dk.easv.privatemoviecollection.BE.Category;
 import dk.easv.privatemoviecollection.BE.Movie;
+import dk.easv.privatemoviecollection.GUI.Model.CategoryModel;
 import dk.easv.privatemoviecollection.GUI.Model.MovieModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,7 +14,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-import java.io.IOException;
+import java.util.List;
 
 public class EditMovieController {
 
@@ -27,8 +28,29 @@ public class EditMovieController {
     @FXML
     private TextField txtEditFileLink;
     @FXML
-    private ListView<Category> lstCategory;
+    private ListView<String> lstCategory;
+    private ObservableList<String> categoryList;
+    private CategoryModel categoryModel;
 
+    public void initialize() {
+
+        categoryList = FXCollections.observableArrayList();
+
+        try {
+            categoryModel = new CategoryModel();
+            List<Category> categories = categoryModel.getAllCategories();
+
+            for (Category category : categories) {
+                categoryList.add(category.getName());
+            }
+
+            lstCategory.setItems(categoryList);
+
+        } catch (Exception e) {
+            showAlert("Error", "Failed to load categories from the database.");
+            e.printStackTrace();
+        }
+    }
 
     public void setMovie(MovieModel movieModel, Movie movie) {
         this.movieModel = movieModel;
@@ -49,6 +71,7 @@ public class EditMovieController {
              movie.setRating(Float.parseFloat(txtEditRating.getText()));
              movie.setFileLink(txtEditFileLink.getText());
              movie.setCategory(new Category(txtEditMovieTitle.getText()));
+
 
             // Notify the model about the update
             movieModel.updateMovie(movie);
