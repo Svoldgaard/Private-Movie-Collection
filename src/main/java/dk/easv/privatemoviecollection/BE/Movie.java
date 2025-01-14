@@ -2,6 +2,8 @@ package dk.easv.privatemoviecollection.BE;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Movie {
 
@@ -12,9 +14,10 @@ public class Movie {
     private LocalDate lastView;  // Use LocalDate instead of Date
     private float personalRating;
     private Category category;
+    private List<Category> categories;
     private String filePath;
 
-    // Constructor
+
     public Movie(int id, String name, float rating, String fileLink, LocalDate lastView, float personalRating) {
         this.id = id;
         this.name = name;
@@ -22,44 +25,18 @@ public class Movie {
         this.fileLink = fileLink;
         this.personalRating = personalRating;
         this.lastView = lastView;
+        this.categories = new ArrayList<>();
     }
 
-    public Movie(int id, String name, float rating, float personalRating) {
+    public Movie(int id, String name, float rating, float personalRating, List<Category> categories) {
         this.id = id;
         this.name = name;
         this.rating = rating;
         this.personalRating = personalRating;
+        this.categories = categories;  // Store the list of categories
     }
 
-    public Movie(int id, String name, float rating, String fileLink, Category category, float personalRating) {
-        this.id = id;
-        this.name = name;
-        this.rating = rating;
-        this.fileLink = fileLink;
-        this.category = category;
-        this.personalRating = personalRating;
-    }
 
-    // Default constructor
-    public Movie() {
-        this.id = 0;
-        this.name = "";
-        this.rating = 0.0f;
-        this.fileLink = "";
-        this.lastView = LocalDate.now();  // Use current date by default
-        this.personalRating = 0.0f;
-        this.category = null;
-    }
-
-    public Movie(int i, String movieTitle, float rating, float v, Category category) {
-        this.id = i;
-        this.name = movieTitle;
-        this.rating = rating;
-        this.personalRating = v;
-        this.category = category;
-    }
-
-    // Getters and Setters
     public int getId() {
         return id;
     }
@@ -93,7 +70,7 @@ public class Movie {
     }
 
     public LocalDate getLastView() {
-        return lastView;  // Return as LocalDate
+        return lastView;
     }
 
     public void setLastView(LocalDate lastView) {
@@ -122,8 +99,16 @@ public class Movie {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             return lastView.format(formatter);  // Format as "yyyy-MM-dd"
         } else {
-            return "No Date";  // Or return an empty string if you prefer
+            return "No Date";  
         }
+    }
+
+    public List<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
     }
 
     @Override

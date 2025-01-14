@@ -63,6 +63,7 @@ public class Movie_DAO implements IMovieDataAccess {
         try (Connection conn = dbConnect.getConnection()) {
             conn.setAutoCommit(false);
 
+            // Insert the movie into the Movie table
             String movieSql = "INSERT INTO Movie (Name, Rating, FileLink, LastView) VALUES (?, ?, ?, ?)";
             try (PreparedStatement movieStmt = conn.prepareStatement(movieSql, Statement.RETURN_GENERATED_KEYS)) {
                 movieStmt.setString(1, movie.getName());
@@ -77,26 +78,29 @@ public class Movie_DAO implements IMovieDataAccess {
                     throw new SQLException("Failed to retrieve Movie ID.");
                 }
                 int movieId = rs.getInt(1);
-                movie.setId(movieId);
+                movie.setId(movieId);  // Set the generated Movie ID
             }
 
-            // Save the movie's category relation in the CatMovie table
+            // Now, insert the selected categories for the movie into the CatMovie table
             String categorySql = "SELECT ID FROM Category WHERE CName = ?";
-            int categoryId;
-            try (PreparedStatement categoryStmt = conn.prepareStatement(categorySql)) {
-                categoryStmt.setString(1, movie.getCategory().getName());
-                ResultSet rs = categoryStmt.executeQuery();
-                if (!rs.next()) {
-                    throw new SQLException("Category not found: " + movie.getCategory().getName());
-                }
-                categoryId = rs.getInt("ID");
-            }
-
             String catMovieSql = "INSERT INTO CatMovie (MovieID, CategoryID) VALUES (?, ?)";
+
             try (PreparedStatement catMovieStmt = conn.prepareStatement(catMovieSql)) {
-                catMovieStmt.setInt(1, movie.getId());
-                catMovieStmt.setInt(2, categoryId);
-                catMovieStmt.executeUpdate();
+                for (Category category : movie.getCategories()) {
+                    try (PreparedStatement categoryStmt = conn.prepareStatement(categorySql)) {
+                        categoryStmt.setString(1, category.getName());
+                        ResultSet rs = categoryStmt.executeQuery();
+
+                        if (!rs.next()) {
+                            throw new SQLException("Category not found: " + category.getName());
+                        }
+
+                        int categoryId = rs.getInt("ID");
+                        catMovieStmt.setInt(1, movie.getId());  // Set MovieID
+                        catMovieStmt.setInt(2, categoryId);     // Set CategoryID
+                        catMovieStmt.executeUpdate();
+                    }
+                }
             }
 
             conn.commit();

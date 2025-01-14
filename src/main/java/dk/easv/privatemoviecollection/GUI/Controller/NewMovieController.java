@@ -2,16 +2,14 @@ package dk.easv.privatemoviecollection.GUI.Controller;
 
 //Project import
 import dk.easv.privatemoviecollection.BE.Movie;
-import dk.easv.privatemoviecollection.BE.Category;  // Add this import for Category
-import dk.easv.privatemoviecollection.GUI.Model.CategoryModel;  // Add import for CategoryModel
+import dk.easv.privatemoviecollection.BE.Category;
+import dk.easv.privatemoviecollection.GUI.Model.CategoryModel;
 import dk.easv.privatemoviecollection.GUI.Model.MovieModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -19,7 +17,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-import java.util.EventObject;
+import java.util.ArrayList;
 import java.util.List;
 
 public class NewMovieController {
@@ -79,17 +77,21 @@ public class NewMovieController {
                 return;
             }
 
-            // Create the first category (adjust for multiple categories if needed)
-            Category category = new Category();
-            category.setName(selectedCategories.get(0));
+            // Create a list of categories based on selected categories
+            List<Category> categoryList = new ArrayList<>();
+            for (String categoryName : selectedCategories) {
+                Category category = new Category();
+                category.setName(categoryName);
+                categoryList.add(category);
+            }
 
-            // Create the Movie object with the file link
-            Movie newMovie = new Movie(0, movieTitle, rating, 0.0f, category);
+            // Create the Movie object with the file link and multiple categories
+            Movie newMovie = new Movie(0, movieTitle, rating, 0.0f, categoryList);  // Modify the constructor to accept a list of categories
             newMovie.setFileLink(fileLink);  // Set the file link for the movie
 
             // Save the movie
             MovieModel movieModel = new MovieModel();
-            Movie savedMovie = movieModel.addMovie(newMovie);
+            movieModel.addMovie(newMovie);
 
             // Refresh the movie list in the MovieController
             if (movieController != null) {
@@ -106,15 +108,15 @@ public class NewMovieController {
             e.printStackTrace();
             showAlert("Error", "Failed to add movie.");
         }
+
         // To Save when movie has been edited
         if(movie != null){
             movie.setName(txtMovieTitle.getText());
             movie.setRating(Float.parseFloat(txtRating.getText()));
             movie.setFileLink(txtFileLink.getText());
-
         }
-
     }
+
 
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
