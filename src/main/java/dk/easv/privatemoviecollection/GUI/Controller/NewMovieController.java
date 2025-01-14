@@ -65,7 +65,6 @@ public class NewMovieController {
 
     @FXML
     private void btnSave(ActionEvent actionEvent) {
-        // To save when making a new movie
         try {
             String movieTitle = txtMovieTitle.getText().trim();
             float rating = Float.parseFloat(txtRating.getText().trim());
@@ -86,8 +85,8 @@ public class NewMovieController {
             }
 
             // Create the Movie object with the file link and multiple categories
-            Movie newMovie = new Movie(0, movieTitle, rating, 0.0f, categoryList);  // Modify the constructor to accept a list of categories
-            newMovie.setFileLink(fileLink);  // Set the file link for the movie
+            Movie newMovie = new Movie(0, movieTitle, rating, 0.0f, categoryList);
+            newMovie.setFileLink(fileLink);
 
             // Save the movie
             MovieModel movieModel = new MovieModel();
@@ -107,13 +106,6 @@ public class NewMovieController {
         } catch (Exception e) {
             e.printStackTrace();
             showAlert("Error", "Failed to add movie.");
-        }
-
-        // To Save when movie has been edited
-        if(movie != null){
-            movie.setName(txtMovieTitle.getText());
-            movie.setRating(Float.parseFloat(txtRating.getText()));
-            movie.setFileLink(txtFileLink.getText());
         }
     }
 
